@@ -1,8 +1,8 @@
 package worker
 
 import (
-	"BBeeScan-scan/pkg/runner"
 	"BeeScan-scan/pkg/job"
+	"BeeScan-scan/pkg/runner"
 	"log"
 )
 
