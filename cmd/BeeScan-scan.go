@@ -50,7 +50,6 @@ var (
 	nodestate  *job.NodeState
 	taskstate  job.TaskState
 	region     *ipinfo.Ip2Region
-	//wg         sizedwaitgroup.SizedWaitGroup
 	wg         sync.WaitGroup
 	rl         ratelimit.Limiter
 	wapp       *gowap.Wappalyzer
@@ -70,7 +69,7 @@ func init() {
 	results = make(chan *runner.Output, 1000)
 	GoNmap = gonmap.GoNmapInit(f)
 	wapp, _ = gowapp.GowappInit(f)
-	fofaPrints = fringerprint.InitFofa(f)
+	fofaPrints = fringerprint.FOFAInit(f)
 	region = ipinfo.IpInfoInit(f)
 	conn = db.InitRedis()
 	esclient = db.ElasticSearchInit()                                //初始化redis连接
@@ -307,7 +306,7 @@ func Scan(target *runner.Runner) *runner.Output {
 				result.Protocol = strings.ToUpper(target.Protocol)
 				result.Domain = target.Domain
 
-				if result.Webbanner.Header != "" {
+				if webresult.Header != "" {
 					result.Banner = result.Webbanner.Header
 				} else {
 					result.Banner = nmapbanner.Banner
@@ -360,7 +359,8 @@ func Scan(target *runner.Runner) *runner.Output {
 					result.Port = target.Port
 					result.Protocol = strings.ToUpper(target.Protocol)
 					result.Domain = target.Domain
-					if result.Webbanner.Header != "" {
+
+					if webresult.Header != "" {
 						result.Banner = result.Webbanner.Header
 					} else {
 						result.Banner = nmapbanner.Banner

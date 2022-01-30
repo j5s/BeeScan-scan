@@ -36,27 +36,15 @@ func ElasticSearchInit() *elastic.Client {
 // EsAdd 添加结果到es数据库
 func EsAdd(client *elastic.Client, res *runner.Output) {
 
-	// 先搜索ID文档是否存在，若存在，则采取更新措施，否则插入
-	//_, err := client.Get().Index("beescan").Id(res.Ip + "-" + res.Domain).Do(context.Background())
-	//if err != nil {
-	//	_, err := client.Index().Index("beescan").Id(res.Ip + "-" + res.Domain).BodyJson(res).Do(context.Background())
-	//	if err != nil {
-	//		log2.Error(err)
-	//		fmt.Fprintln(color.Output, color.HiRedString("[ERROR]"), "[DBEsAdd]:", err)
-	//	}
-	//} else {
-	//	_, err := client.Update().Index("beescan").Id(res.Ip + "-" + res.Domain).Doc(res).Refresh("true").Do(context.Background())
-	//	if err != nil {
-	//		log2.Error(err)
-	//		fmt.Fprintln(color.Output, color.HiRedString("[ERROR]"), "[DBEsUpdate]:", err)
-	//	}
-	//}
-
 	// 文档件存在则更新，否则插入
 	_, err := client.Update().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(res.Ip + "-" + res.Port + "-" + res.Domain).Doc(res).Upsert(res).Refresh("true").Do(context.Background())
 	if err != nil {
 		log2.Error(err)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERROR]"), "[DBEsUpInsert]:", err)
 	}
+
+}
+
+func ESLogAdd(client *elastic.Client, filename string) {
 
 }

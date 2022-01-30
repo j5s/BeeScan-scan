@@ -32,7 +32,7 @@ type FofaPrints []Fofa
 
 var FofaJson []byte
 
-func InitFofa(f embed.FS) FofaPrints {
+func FOFAInit(f embed.FS) FofaPrints {
 
 	FofaJson, err := f.ReadFile("goby.json")
 	if err != nil {

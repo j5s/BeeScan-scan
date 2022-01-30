@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/projectdiscovery/hmap/store/hybrid"
-	"log"
 	"net"
 	"net/url"
 	"strings"
@@ -40,7 +39,7 @@ func NewRunner(ip string, port string, domain string, protocol string, FofaPrint
 		Protocol: protocol,
 	}
 	if hm, err := hybrid.New(hybrid.DefaultDiskOptions); err != nil {
-		log.Fatalf("Could not create temporary input file: %s\n", err)
+		runner.Hm = nil
 	} else {
 		runner.Hm = hm
 	}

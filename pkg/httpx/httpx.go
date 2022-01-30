@@ -36,7 +36,7 @@ func NewHttpx(options *HTTPOptions) (*HTTPX, error) {
 	httpx := &HTTPX{}
 	dialer, err := fastdialer.NewDialer(fastdialer.DefaultOptions)
 	if err != nil {
-		return nil, fmt.Errorf("could not create resolver cache: %s", err)
+		return nil, nil
 	}
 	httpx.Dialer = dialer
 	httpx.Options = options
