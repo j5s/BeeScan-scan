@@ -1,0 +1,46 @@
+
+# 节点配置
+NodeConfig:
+  # 节点名称配置
+  NodeName: BeeScan_node_1
+  # 节点队列
+  NodeQueue: BeeScanQueue_node_1
+
+# 字典配置
+DicConfig:
+  Dic_user: 
+  Dic_pwd:
+
+# 任务池配置
+WorkerConfig:
+  # 任务池数量
+  WorkerNumber: 20
+  # 速率配置(每秒最多运行任务数)
+  Thread: 10
+
+# Log配置
+LogConfig:
+  # 每个日志文件保存的最大尺寸 单位：M
+  max_size: 50
+  # 日志文件最多保存多少个备份
+  max_backups: 1
+  # 文件最多保存多少天
+  max_age: 30
+  # 是否压缩
+  compress: false
+
+# 数据库配置
+DBConfig:
+  # Redis配置
+  Redis:
+    Host: "101.43.173.130"
+    Password: ""
+    Port: "5566"
+    Database: "0"
+  # Elasticsearch配置
+  Elasticsearch:
+    Host: "101.43.173.130"
+    Port: "9205"
+    Username: ""
+    Password: ""
+    Index: "beescan"
