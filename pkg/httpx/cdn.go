@@ -866,7 +866,7 @@ func (h *HTTPX) CDNCheck(r *Response, ip string, canme string) (string, error) {
 		}
 	}
 
-	return "", errors.New("not found cdn")
+	return "否", errors.New("not found cdn")
 }
 func StrInSlice(i string, array []string) bool {
 	ret := false

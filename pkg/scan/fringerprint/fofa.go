@@ -37,13 +37,13 @@ func FOFAInit(f embed.FS) FofaPrints {
 	FofaJson, err := f.ReadFile("goby.json")
 	if err != nil {
 		log2.Error("[FOFAInit]:", err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERROR]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[FOFAInit]:", err)
+		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[FOFAInit]:", err)
 	}
 	var fofas FofaPrints
 	err1 := json.Unmarshal(FofaJson, &fofas)
 	if err1 != nil {
 		log2.Error("[FOFAInit]:", err1)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERROR]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[FOFAInit]:", err1)
+		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[FOFAInit]:", err1)
 	}
 	return fofas
 }

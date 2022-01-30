@@ -27,7 +27,7 @@ func InitRedis() *redis.Client {
 	Pong, err := conn.Ping().Result()
 	if err != nil {
 		log2.Error("[RedisInit]:", err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERROR]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[RedisInit]:", err)
+		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[RedisInit]:", err)
 		os.Exit(1)
 	} else if Pong == "PONG" {
 		return conn

@@ -953,10 +953,7 @@ func grabResponse(target Target, data []byte, config *Config) ([]byte, error) {
 
 // 错误类型
 var (
-	readError       = errors.New("read data from destination failed")
-	sendError       = errors.New("send data to destination failed")
-	cloasedByRemote = errors.New("socket closed by remote host")
-	emptyResponse   = errors.New("empty response fetched from destination'")
+	emptyResponse = errors.New("empty response fetched from destination'")
 )
 
 func gonmapinit() {
