@@ -853,7 +853,7 @@ func IPCDNCheck(ip string) bool {
 	return false
 }
 
-// cname cdn check
+// CnameCDNCheck cname cdn check
 func CnameCDNCheck(canme string) bool {
 	for k, _ := range cdnCnameKeywords {
 		if strings.Contains(canme, k) {
@@ -863,7 +863,7 @@ func CnameCDNCheck(canme string) bool {
 	return false
 }
 
-// header cdn check
+// HeaderCDNCheck header cdn check
 func HeaderCDNCheck(r *httpx.Response) bool {
 	for k, _ := range r.Headers {
 		if util.StrInSlice(strings.ToLower(k), cdnHeaderKeys) {

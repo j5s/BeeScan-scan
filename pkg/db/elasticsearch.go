@@ -2,7 +2,6 @@ package db
 
 import (
 	"BeeScan-scan/pkg/config"
-	"BeeScan-scan/pkg/file"
 	log2 "BeeScan-scan/pkg/log"
 	"BeeScan-scan/pkg/runner"
 	"BeeScan-scan/pkg/util"
@@ -58,7 +57,7 @@ func ESLogAdd(client *elastic.Client, filename string) {
 	var TheNodeLog NodeLog
 	var logs []byte
 	var err error
-	if file.Exists(filename) {
+	if util.FileExist(filename) {
 		logs, err = ioutil.ReadFile(filename)
 		if err != nil {
 			log2.Error(err)

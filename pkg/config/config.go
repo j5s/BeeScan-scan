@@ -2,7 +2,6 @@ package config
 
 import (
 	"BeeScan-scan/pkg/file"
-	log2 "BeeScan-scan/pkg/log"
 	"bytes"
 	"fmt"
 	"github.com/fatih/color"
@@ -80,7 +79,6 @@ func (config *Config) LogMaxSize() int {
 func Setup() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
-		log2.Error("[Config_Setup]:fail to get current path", err)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:fail to get current path", err)
 	}
 	// 配置文件
@@ -123,12 +121,10 @@ func ReadYamlConfig(configFile string) {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		log2.Error("[config_Setup]:fail to read 'config.yaml'", err)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to read 'config.yaml", err)
 	}
 	err = viper.Unmarshal(&GlobalConfig)
 	if err != nil {
-		log2.Error("[config_Setup]:fail to parse 'config.yaml', check format", err)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to parse 'config.yaml', check format", err)
 	}
 	GlobalConfig.NodeConfig.NodeQueue = GlobalConfig.NodeConfig.NodeName + "_queue"
@@ -139,18 +135,15 @@ func WriteYamlConfig(configFile string) {
 	viper.SetConfigType("yaml")
 	err := viper.ReadConfig(bytes.NewBuffer(defaultYamlByte))
 	if err != nil {
-		log2.Error("[config_Setup]:fail to read default config bytes:", err)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to read default config bytes:", err)
 	}
 
 	f, err := os.Create("config.yaml")
 	if err != nil {
-		log2.Error("[config_Setup]:fail to write config yaml", err)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to write config yaml", err)
 	}
 	_, err = f.Write(defaultYamlByte)
 	if err != nil {
-		log2.Error("[config_Setup]", err)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", err)
 	}
 }
