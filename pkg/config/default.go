@@ -11,8 +11,6 @@ var defaultYamlByte = []byte(`
 NodeConfig:
   # 节点名称配置
   NodeName: BeeScan_node_1
-  # 节点队列配置
-  NodeQueue: BeeScanQueue_node_1
 
 # 字典配置
 DicConfig:

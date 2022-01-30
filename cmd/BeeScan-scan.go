@@ -150,6 +150,7 @@ func main() {
 		}
 
 		if len(jobs) > 0 {
+			nodestate.State = "running"
 			for i := 0; i < len(jobs); i++ {
 				j := <-jobs
 				wg.Add(1)
@@ -167,10 +168,10 @@ func main() {
 						tmpres.Wappalyzer = gowapp.GoWapp(tmpres, wapp)
 						if tmpres.Ip != "" {
 							log2.Info("[GoWapp]:", tmpres.Ip)
-							fmt.Fprintln(color.Output, color.HiRedString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GoWapp]:", tmpres.Ip)
+							fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GoWapp]:", tmpres.Ip)
 						} else if tmpres.Domain != "" {
 							log2.Info("[GoWapp]:", tmpres.Ip)
-							fmt.Fprintln(color.Output, color.HiRedString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GoWapp]:", tmpres.Ip)
+							fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GoWapp]:", tmpres.Ip)
 						}
 						time.Sleep(500 * time.Millisecond)
 					}
@@ -189,9 +190,16 @@ func main() {
 			}
 		}
 
+		// 写入日志到es数据库
+		if nodestate.State == "running" {
+			db.ESLogAdd(esclient, "BeeScanLogs.log")
+		}
+
 		// 扫描节点状态更新
 		node.NodeUpdate(conn, config.GlobalConfig.NodeConfig.NodeName, nodestate)
 		if len(jobs) == 0 {
+			fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[ConnectCheck]")
+			nodestate.State = "free"
 			taskstate.Name = ""
 			taskstate.Running = 0
 			taskstate.Finished = 0

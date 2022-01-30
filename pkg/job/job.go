@@ -20,6 +20,7 @@ type NodeState struct {
 	Tasks    int
 	Running  int
 	Finished int
+	State    string
 }
 
 type TaskState struct {

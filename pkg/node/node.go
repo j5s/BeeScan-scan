@@ -22,6 +22,7 @@ func NodeRegister(c *redis2.Client, nodename string) {
 		state["tasks"] = 0
 		state["running"] = 0
 		state["finished"] = 0
+		state["state"] = "free"
 		state["lasttime"] = time.Now().Format("2006-01-02 15:04:05")
 		c.HMSet(nodename, state)
 	} else {
@@ -34,6 +35,7 @@ func NodeUpdate(c *redis2.Client, nodename string, nodestate *job.NodeState) {
 	c.HSet(nodename, "tasks", nodestate.Tasks)
 	c.HSet(nodename, "running", nodestate.Running)
 	c.HSet(nodename, "finished", nodestate.Finished)
+	c.HSet(nodename, "state", nodestate.State)
 	c.HSet(nodename, "lasttime", time.Now().Format("2006-01-02 15:04:05"))
 }
 
