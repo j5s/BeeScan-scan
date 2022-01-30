@@ -5,7 +5,9 @@ import (
 	"BeeScan-scan/pkg/file"
 	log2 "BeeScan-scan/pkg/log"
 	"BeeScan-scan/pkg/runner"
+	"BeeScan-scan/pkg/util"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/olivere/elastic/v7"
@@ -51,6 +53,7 @@ func EsAdd(client *elastic.Client, res *runner.Output) {
 
 }
 
+// ESLogAdd 日志写入es数据库
 func ESLogAdd(client *elastic.Client, filename string) {
 	var TheNodeLog NodeLog
 	var logs []byte
@@ -68,4 +71,47 @@ func ESLogAdd(client *elastic.Client, filename string) {
 			fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[ESLogAdd]:", err)
 		}
 	}
+}
+
+// EsScanRegular 定期重新扫描es数据库中时间超过30天的目标
+func EsScanRegular(client *elastic.Client) []string {
+	var res *elastic.SearchResult
+	var count int64
+	var err error
+	var targets []string
+	count, err = client.Count().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Do(context.Background())
+	res, err = client.Search(config.GlobalConfig.DBConfig.Elasticsearch.Index).Size(int(count)).From(0).Do(context.Background())
+	if err != nil {
+		log2.Error(err)
+		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[EsScanRegular]:", err)
+	}
+	if res != nil {
+		if res.Hits != nil {
+			if res.Hits.Hits != nil {
+				for _, item := range res.Hits.Hits {
+					out := runner.Output{}
+					err = json.Unmarshal(item.Source, &out)
+					if err != nil {
+						fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[EsScanRegular]:", err)
+					}
+					if util.DaySub(out.LastTime) >= 30 {
+						if out.Domain != "" && out.Protocol == "UDP" {
+							target := out.Domain + ":" + "U:" + out.Port
+							targets = append(targets, target)
+						} else if out.Domain != "" && out.Protocol == "TCP" {
+							target := out.Domain + ":" + out.Port
+							targets = append(targets, target)
+						} else if out.Ip != "" && out.Protocol == "UDP" {
+							target := out.Ip + ":" + "U:" + out.Port
+							targets = append(targets, target)
+						} else if out.Ip != "" && out.Protocol == "TCP" {
+							target := out.TargetId + ":" + out.Port
+							targets = append(targets, target)
+						}
+					}
+				}
+			}
+		}
+	}
+	return targets
 }

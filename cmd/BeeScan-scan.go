@@ -76,9 +76,11 @@ func init() {
 	node.NodeRegister(conn, config.GlobalConfig.NodeConfig.NodeName) //节点注册
 	queue = job.NewQueue()
 	nodestate = &job.NodeState{
-		Tasks:    0,
-		Running:  0,
-		Finished: 0,
+		Tasks:     0,
+		Running:   0,
+		Finished:  0,
+		State:     "free",
+		StartTime: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	//wg = sizedwaitgroup.New(config.GlobalConfig.WorkerConfig.WorkerNumber)
 	rl = ratelimit.New(config.GlobalConfig.WorkerConfig.Thread)
@@ -203,6 +205,20 @@ func main() {
 			taskstate.Name = ""
 			taskstate.Running = 0
 			taskstate.Finished = 0
+
+			// 节点每运行15天会定时重新扫描es数据库中一定时长的目标
+			if util.DaySub(nodestate.StartTime) > 15 && util.DaySub(nodestate.StartTime)%15 == 0 {
+				RegularTargets := db.EsScanRegular(esclient)
+				RegularTargets = util.Removesamesip(RegularTargets)
+				if RegularTargets != nil {
+					log2.Info("[targets]:", RegularTargets)
+					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[targets]:", RegularTargets)
+					for _, v := range RegularTargets {
+						job.Push(queue, v)
+					}
+				}
+			}
+
 			time.Sleep(10 * time.Second)
 		}
 	}

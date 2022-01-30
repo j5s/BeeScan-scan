@@ -17,10 +17,11 @@ type Job struct {
 }
 
 type NodeState struct {
-	Tasks    int
-	Running  int
-	Finished int
-	State    string
+	Tasks     int
+	Running   int
+	Finished  int
+	State     string
+	StartTime string
 }
 
 type TaskState struct {
