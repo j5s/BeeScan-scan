@@ -2,7 +2,7 @@ package gowapp
 
 import (
 	log2 "BeeScan-scan/pkg/log"
-	"BeeScan-scan/pkg/runner"
+	"BeeScan-scan/pkg/result"
 	"BeeScan-scan/pkg/scan/httpcheck"
 	"embed"
 	"fmt"
@@ -76,7 +76,7 @@ func GowappInit(f embed.FS) (*gowap.Wappalyzer, error) {
 }
 
 // GoWapp Wappalyzer识别模块
-func GoWapp(r *runner.Output, wapp *gowap.Wappalyzer) *gowap.Output {
+func GoWapp(r *result.Output, wapp *gowap.Wappalyzer) *gowap.Output {
 	if httpcheck.HttpCheck(r.Domain, r.Port, r.Ip) {
 		fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GoWapp]:", r.Ip)
 		var fullUrl string

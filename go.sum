@@ -303,6 +303,14 @@ github.com/jiaocoll/GoWapp v0.0.0-20220119052345-c3751020cbc4 h1:22ReP/N8ALJJ3Ry
 github.com/jiaocoll/GoWapp v0.0.0-20220119052345-c3751020cbc4/go.mod h1:oORXYgT9VpGyCEpSytx0ukKNCFFn4xAyQaQ/y5hREjw=
 github.com/jiaocoll/GoWapp v0.0.0-20220119070400-84ad7a38481d h1:hGBbHz31OuT+8ivtxaO6LSoiD63Hb1BM663soSDrQH0=
 github.com/jiaocoll/GoWapp v0.0.0-20220119070400-84ad7a38481d/go.mod h1:oORXYgT9VpGyCEpSytx0ukKNCFFn4xAyQaQ/y5hREjw=
+github.com/jiaocoll/govaluate v3.1.0+incompatible h1:VuUdF/Xh4ZaqrLtLAYhkBFCiwNorm+x+pCKfFWZMcns=
+github.com/jiaocoll/govaluate v3.1.0+incompatible/go.mod h1:FWtmM6TvVlxhN2FedRK4CRvj0g+auzs64ggKNPPNZEQ=
+github.com/jiaocoll/govaluate v3.1.1+incompatible h1:3E+NGwFsIQrdHk77VXo0MXky33/16IZwuRs8kggoeG4=
+github.com/jiaocoll/govaluate v3.1.1+incompatible/go.mod h1:FWtmM6TvVlxhN2FedRK4CRvj0g+auzs64ggKNPPNZEQ=
+github.com/jiaocoll/govaluate v3.1.2+incompatible h1:8p1G0Be6hORGivj9+T3mQflFqAQEEeiseRw5YMrCARk=
+github.com/jiaocoll/govaluate v3.1.2+incompatible/go.mod h1:FWtmM6TvVlxhN2FedRK4CRvj0g+auzs64ggKNPPNZEQ=
+github.com/jiaocoll/govaluate v3.1.3+incompatible h1:vsazM2LpX6sORcRgxVOvcskvgFcaNJjN0zlGBs5w0wo=
+github.com/jiaocoll/govaluate v3.1.3+incompatible/go.mod h1:FWtmM6TvVlxhN2FedRK4CRvj0g+auzs64ggKNPPNZEQ=
 github.com/jinzhu/gorm v1.9.16 h1:+IyIjPEABKRpsu/F8OvDPy9fyQlgsg2luMV2ZIH5i5o=
 github.com/jinzhu/gorm v1.9.16/go.mod h1:G3LB3wezTOWM2ITLzPxEXgSkOXAntiLHS7UdBefADcs=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=

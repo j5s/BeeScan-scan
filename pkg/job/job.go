@@ -1,7 +1,9 @@
 package job
 
 import (
-	"BeeScan-scan/pkg/runner"
+	"BeeScan-scan/pkg/httpx"
+	"BeeScan-scan/pkg/scan/fringerprint"
+	"github.com/projectdiscovery/hmap/store/hybrid"
 	"time"
 )
 
@@ -11,8 +13,18 @@ import (
 程序功能：任务队列
 */
 
+type JobRunner struct {
+	Ip       string
+	Port     string
+	Domain   string
+	Protocol string
+	Ht       *httpx.HTTPX
+	Hm       *hybrid.HybridMap
+	Fofa     *fringerprint.FofaPrints
+}
+
 type Job struct {
-	Targets []*runner.Runner
+	Targets []*JobRunner
 	State   string
 }
 

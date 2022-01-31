@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"os"
 	"time"
 )
@@ -60,6 +61,17 @@ func HourSub(BeforeData string) int {
 	return int(res)
 }
 
+func MinSub(BeforeData string) int {
+	current := time.Now().Unix()
+
+	loc, _ := time.LoadLocation("Local") //获取时区
+	tmp, _ := time.ParseInLocation("2006-01-02 15:04:05", BeforeData, loc)
+	timestamp := tmp.Unix() //转化为时间戳 类型是int64
+
+	res := (current - timestamp) / 60 //相差值
+	return int(res)
+}
+
 // FileExist 判断所给路径文件/文件夹是否存在
 func FileExist(path string) bool {
 	_, err := os.Stat(path) //os.Stat获取文件信息
@@ -70,4 +82,16 @@ func FileExist(path string) bool {
 		return false
 	}
 	return true
+}
+
+func StrToSlince(SourceData []string) string {
+	var res string
+	for k, v := range SourceData {
+		if k == 0 {
+			res += fmt.Sprintf("%s ", v)
+		} else {
+			res += fmt.Sprintf("%s ", v)
+		}
+	}
+	return res
 }

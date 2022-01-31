@@ -3,6 +3,8 @@ package fringerprint
 import (
 	"BeeScan-scan/pkg/httpx"
 	log2 "BeeScan-scan/pkg/log"
+	"BeeScan-scan/pkg/scan/gonmap"
+	"BeeScan-scan/pkg/util"
 	"embed"
 	"encoding/json"
 	"fmt"
@@ -32,15 +34,15 @@ type FofaPrints []Fofa
 
 var FofaJson []byte
 
-func FOFAInit(f embed.FS) FofaPrints {
-
-	FofaJson, err := f.ReadFile("goby.json")
+func FOFAInit(f embed.FS) *FofaPrints {
+	var err error
+	FofaJson, err = f.ReadFile("goby.json")
 	if err != nil {
 		log2.Error("[FOFAInit]:", err)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[FOFAInit]:", err)
 	}
-	var fofas FofaPrints
-	err1 := json.Unmarshal(FofaJson, &fofas)
+	fofas := &FofaPrints{}
+	err1 := json.Unmarshal(FofaJson, fofas)
 	if err1 != nil {
 		log2.Error("[FOFAInit]:", err1)
 		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[FOFAInit]:", err1)
@@ -48,26 +50,73 @@ func FOFAInit(f embed.FS) FofaPrints {
 	return fofas
 }
 
-func (f *Fofa) Matcher(response *httpx.Response) (bool, error) {
+func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port string) (bool, error) {
 	expString := f.Condition
-	expression, err := govaluate.NewEvaluableExpressionWithFunctions(expString, HelperFunctions(response))
+	expression, err := govaluate.NewEvaluableExpressionWithFunctions(expString, HelperFunctions(response, gomapres, port))
 	if err != nil {
 		return false, err
 	}
 	paramters := make(map[string]interface{})
-	if response != nil {
+	if response != nil && gomapres != nil {
 		if response.Title != "" {
 			paramters["title"] = response.Title
 		} else {
 			paramters["title"] = ""
 		}
+
 		if response.GetHeader("server") != "" {
 			paramters["server"] = response.GetHeader("server")
+		} else if response.GetHeader("server") == "" && gomapres.Name != "" {
+			paramters["server"] = gomapres.Service.Name
 		} else {
 			paramters["server"] = ""
 		}
+
+		if gomapres.Service.Protocol != "" {
+			paramters["protocol"] = gomapres.Service.Protocol
+		} else {
+			paramters["protocol"] = "http"
+		}
+
+		if response.HeaderStr != "" {
+			paramters["header"] = response.HeaderStr
+		} else {
+			paramters["header"] = ""
+		}
+
+		if response.DataStr != "" {
+			paramters["body"] = response.DataStr
+		} else {
+			paramters["body"] = ""
+		}
+
+		if gomapres.Banner != "" {
+			paramters["banner"] = gomapres.Banner
+		} else {
+			paramters["banner"] = ""
+		}
+
+		if response.TLSData != nil {
+			var cert string
+			cert += util.StrToSlince(response.TLSData.DNSNames)
+			cert += util.StrToSlince(response.TLSData.IssuerCommonName)
+			cert += util.StrToSlince(response.TLSData.Organization)
+			cert += util.StrToSlince(response.TLSData.CommonName)
+			cert += util.StrToSlince(response.TLSData.Emails)
+			cert += util.StrToSlince(response.TLSData.IssuerOrg)
+			paramters["cert"] = cert
+		} else {
+			paramters["cert"] = ""
+		}
+
+		if port != "" {
+			paramters["port"] = port
+		} else {
+			paramters["port"] = ""
+		}
+
 	}
-	paramters["protocol"] = "http"
+
 	result, err := expression.Evaluate(paramters)
 	if err != nil {
 		return false, err
@@ -75,10 +124,10 @@ func (f *Fofa) Matcher(response *httpx.Response) (bool, error) {
 	t := result.(bool)
 	return t, err
 }
-func (f *FofaPrints) Matcher(response *httpx.Response) (FofaPrints, error) {
+func (f *FofaPrints) Matcher(response *httpx.Response, gomapres *gonmap.Result, port string) (FofaPrints, error) {
 	var ret FofaPrints
 	for _, item := range *f {
-		v, err := item.Matcher(response)
+		v, err := item.Matcher(response, gomapres, port)
 		if err != nil {
 			return nil, err
 		}
@@ -90,9 +139,8 @@ func (f *FofaPrints) Matcher(response *httpx.Response) (FofaPrints, error) {
 }
 
 // HelperFunctions contains the dsl functions
-func HelperFunctions(resp *httpx.Response) (functions map[string]govaluate.ExpressionFunction) {
+func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string) (functions map[string]govaluate.ExpressionFunction) {
 	functions = make(map[string]govaluate.ExpressionFunction)
-
 	functions["title_contains"] = func(args ...interface{}) (interface{}, error) {
 		pattern := strings.ToLower(toString(args[0]))
 		var title string
@@ -120,11 +168,32 @@ func HelperFunctions(resp *httpx.Response) (functions map[string]govaluate.Expre
 	}
 
 	functions["protocol_contains"] = func(args ...interface{}) (interface{}, error) {
-		return false, nil
+		pattern := strings.ToLower(toString(args[0]))
+		var protocol string
+		if gomapres != nil {
+			if gomapres.Service.Protocol != "" {
+				protocol = strings.ToLower(gomapres.Service.Protocol)
+			}
+			if resp != nil {
+				if gomapres.Service.Protocol == "" && resp.HeaderStr != "" {
+					protocol = "http"
+				}
+			}
+		}
+
+		return strings.Index(protocol, pattern) != -1, nil
 	}
 
 	functions["banner_contains"] = func(args ...interface{}) (interface{}, error) {
-		return false, nil
+		pattern := strings.ToLower(toString(args[0]))
+		var banner string
+		if gomapres != nil {
+
+			if gomapres.Banner != "" {
+				banner = strings.ToLower(gomapres.Banner)
+			}
+		}
+		return strings.Index(banner, pattern) != -1, nil
 	}
 
 	functions["header_contains"] = func(args ...interface{}) (interface{}, error) {
@@ -150,10 +219,26 @@ func HelperFunctions(resp *httpx.Response) (functions map[string]govaluate.Expre
 	}
 
 	functions["cert_contains"] = func(args ...interface{}) (interface{}, error) {
-		return false, nil
+		pattern := strings.ToLower(toString(args[0]))
+		var cert string
+		if resp != nil {
+			if resp.TLSData != nil {
+				cert += util.StrToSlince(resp.TLSData.DNSNames)
+				cert += util.StrToSlince(resp.TLSData.IssuerCommonName)
+				cert += util.StrToSlince(resp.TLSData.Organization)
+				cert += util.StrToSlince(resp.TLSData.CommonName)
+				cert += util.StrToSlince(resp.TLSData.Emails)
+				cert += util.StrToSlince(resp.TLSData.IssuerOrg)
+			}
+		}
+		return strings.Index(cert, pattern) != -1, nil
 	}
 
 	functions["port_contains"] = func(args ...interface{}) (interface{}, error) {
+		pattern := strings.ToLower(toString(args[0]))
+		if port != "" {
+			return strings.Index(port, pattern) != -1, nil
+		}
 		return false, nil
 	}
 
@@ -162,8 +247,4 @@ func HelperFunctions(resp *httpx.Response) (functions map[string]govaluate.Expre
 
 func toString(v interface{}) string {
 	return fmt.Sprint(v)
-}
-
-func toInt(v interface{}) int {
-	return int(v.(float64))
 }

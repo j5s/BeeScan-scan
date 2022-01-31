@@ -972,15 +972,15 @@ func gonmapinit() {
 }
 
 // GoNmap NMAP扫描模块
-func GoNmapInit(f embed.FS) VScan {
+func GoNmapInit(f embed.FS) *VScan {
 	gonmapinit()
 	// 初始化 VScan 实例，并加载默认 nmap-probes 文件解析 Probe 列表
-	v := VScan{}
+	v := &VScan{}
 	v.Init(f)
 	return v
 }
 
-func GoNmapScan(v VScan, ip string, port string, protocol string) (Result, error) {
+func GoNmapScan(v *VScan, ip string, port string, protocol string) (*Result, error) {
 	log2.Info("[ServerCheck]:", ip)
 	fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[ServerCheck]:", ip)
 	var target Target
@@ -988,5 +988,5 @@ func GoNmapScan(v VScan, ip string, port string, protocol string) (Result, error
 	target.Port, _ = strconv.Atoi(port)
 	target.Protocol = strings.ToLower(protocol)
 	result, err := v.Explore(target, config)
-	return result, err
+	return &result, err
 }

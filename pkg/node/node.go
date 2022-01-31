@@ -40,7 +40,7 @@ func NodeUpdate(c *redis2.Client, nodename string, nodestate *job.NodeState) {
 }
 
 // TaskUpdate 任务状态更新
-func TaskUpdate(c *redis2.Client, task job.TaskState) {
+func TaskUpdate(c *redis2.Client, task *job.TaskState) {
 	c.HSet(task.Name, "running", task.Running)
 	c.HSet(task.Name, "finished", task.Finished)
 	c.HSet(task.Name, "lasttime", time.Now().Format("2006-01-02 15:04:05"))

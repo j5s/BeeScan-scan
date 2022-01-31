@@ -1,7 +1,7 @@
 package config
 
 import (
-	"BeeScan-scan/pkg/file"
+	"BeeScan-scan/pkg/util"
 	"bytes"
 	"fmt"
 	"github.com/fatih/color"
@@ -84,7 +84,7 @@ func Setup() {
 	// 配置文件
 	configFile := path.Join(dir, "config.yaml")
 
-	if !file.Exists(configFile) {
+	if !util.FileExist(configFile) {
 		WriteYamlConfig(configFile)
 	}
 	ReadYamlConfig(configFile)

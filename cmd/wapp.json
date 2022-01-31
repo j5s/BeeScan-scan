@@ -1483,10 +1483,7 @@
                 "\\.app-us1\\.com",
                 "\\.ac-page\\.com"
             ],
-            "url": [
-                "\\.activehosted\\.com",
-                "\\.ac-page\\.com"
-            ],
+            "url": "\\.activehosted\\.com",
             "website": "https://www.activecampaign.com"
         },
         "Acuity Scheduling": {
