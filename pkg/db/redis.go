@@ -3,8 +3,6 @@ package db
 import (
 	"BeeScan-scan/pkg/config"
 	log2 "BeeScan-scan/pkg/log"
-	"fmt"
-	"github.com/fatih/color"
 	"github.com/go-redis/redis"
 	"os"
 	"time"
@@ -27,7 +25,6 @@ func InitRedis() *redis.Client {
 	Pong, err := conn.Ping().Result()
 	if err != nil {
 		log2.Error("[RedisInit]:", err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[RedisInit]:", err)
 		os.Exit(1)
 	} else if Pong == "PONG" {
 		return conn

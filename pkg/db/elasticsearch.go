@@ -7,8 +7,6 @@ import (
 	"BeeScan-scan/pkg/util"
 	"context"
 	"encoding/json"
-	"fmt"
-	"github.com/fatih/color"
 	"github.com/olivere/elastic/v7"
 	"io/ioutil"
 	"os"
@@ -36,7 +34,6 @@ func ElasticSearchInit() *elastic.Client {
 	)
 	if err != nil {
 		log2.Error("[ElasticSearchInit]:", err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[ElasticSearchInit]:", err)
 		os.Exit(1)
 	}
 	return client
@@ -48,8 +45,7 @@ func EsAdd(client *elastic.Client, res *result.Output) {
 	// 文档件存在则更新，否则插入
 	_, err := client.Update().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(res.Ip + "-" + res.Port + "-" + res.Domain).Doc(res).Upsert(res).Refresh("true").Do(context.Background())
 	if err != nil {
-		log2.Error(err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[DBEsUpInsert]:", err)
+		log2.Error("[DBEsUpInsert]:", err)
 	}
 
 }
@@ -62,15 +58,13 @@ func ESLogAdd(client *elastic.Client, filename string) {
 	if util.FileExist(filename) {
 		logs, err = ioutil.ReadFile(filename)
 		if err != nil {
-			log2.Error(err)
-			fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[ESLogAdd]:", err)
+			log2.Error("[ESLogAdd]:", err)
 		}
 		TheNodeLog.Log = string(logs)
 		TheNodeLog.LastTime = time.Now().Format("2006-01-02 15:04:05")
 		_, err = client.Update().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(config.GlobalConfig.NodeConfig.NodeName + "_log").Doc(TheNodeLog).Upsert(TheNodeLog).Refresh("true").Do(context.Background())
 		if err != nil {
-			log2.Error(err)
-			fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[ESLogAdd]:", err)
+			log2.Error("[ESLogAdd]:", err)
 		}
 	}
 }
@@ -84,8 +78,7 @@ func EsScanRegular(client *elastic.Client) []string {
 	count, err = client.Count().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Do(context.Background())
 	res, err = client.Search(config.GlobalConfig.DBConfig.Elasticsearch.Index).Size(int(count)).From(0).Do(context.Background())
 	if err != nil {
-		log2.Error(err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[EsScanRegular]:", err)
+		log2.Error("[EsScanRegular]:", err)
 	}
 	if res != nil {
 		if res.Hits != nil {
@@ -94,7 +87,7 @@ func EsScanRegular(client *elastic.Client) []string {
 					out := result.Output{}
 					err = json.Unmarshal(item.Source, &out)
 					if err != nil {
-						fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[EsScanRegular]:", err)
+						log2.Error("[EsScanRegular]:", err)
 					}
 					if util.DaySub(out.LastTime) >= 30 {
 						if out.Domain != "" && out.Protocol == "UDP" {
@@ -124,7 +117,7 @@ func QueryLogByID(client *elastic.Client, nodename string) string {
 	var TheNodeLog NodeLog
 	res, err = client.Get().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(nodename + "_log").Do(context.Background())
 	if err != nil {
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[ESQueryLog]:", err)
+		log2.Error("[ESQueryLog]:", err)
 	}
 
 	if res != nil {
@@ -132,7 +125,7 @@ func QueryLogByID(client *elastic.Client, nodename string) string {
 			if res.Source != nil {
 				err = json.Unmarshal(res.Source, &TheNodeLog)
 				if err != nil {
-					fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[ESQueryLog]:", err)
+					log2.Error("[ESQueryLog]:", err)
 				}
 			}
 		}

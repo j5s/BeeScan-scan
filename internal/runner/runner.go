@@ -18,7 +18,6 @@ import (
 	"BeeScan-scan/pkg/scan/tcp"
 	"BeeScan-scan/pkg/util"
 	"fmt"
-	"github.com/fatih/color"
 	redis2 "github.com/go-redis/redis"
 	"github.com/projectdiscovery/hmap/store/hybrid"
 	"net"
@@ -99,7 +98,6 @@ func (r *Runner) Request() result.FingerResult {
 	if httpcheck.HttpCheck(r.Domain, r.Port, r.Ip) {
 
 		log2.Info("[HttpRequest]:", r.Ip)
-		fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[HttpRequest]:", r.Ip)
 
 		retried := false
 		protocol := httpx.HTTP
@@ -162,14 +160,12 @@ func (r *Runner) Request() result.FingerResult {
 		cdn, err := r.Ht.CDNCheck(resp, r.Ip, cname)
 		if err != nil {
 			log2.Warn("[CDNCheck]:", err)
-			fmt.Fprintln(color.Output, color.HiYellowString("[WARN]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[CDNCheck]:", err)
 		}
 
 		// 指纹处理
 		fofaResults, err := r.Fofa.Matcher(resp, r.Output.Servers, r.Port)
 		if err != nil {
 			log2.Warn("[FOFAFinger]:", err)
-			fmt.Fprintln(color.Output, color.HiYellowString("[WARN]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[FOFAFinger]:", err)
 		}
 		var webbanner result.FingerResult
 		if resp != nil {
@@ -246,7 +242,6 @@ func Handlejob(c *redis2.Client, queue *job.Queue, taskstate *job.TaskState) {
 				}
 			}
 			log2.Info("[targets]:", targets)
-			fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[targets]:", targets)
 		}
 		for _, t := range targets {
 			job.Push(queue, t) //将任务目标加入到任务队列中
@@ -287,7 +282,6 @@ func HandleTargets(queue *job.Queue, fofaPrints *fringerprint.FofaPrints) []*Run
 					}
 					if err1 != nil {
 						log2.Error("[HandleTargets]:", err1)
-						fmt.Fprintln(color.Output, color.HiRedString("[ERROR]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[HandleTargets]:", err1)
 					}
 					runners = append(runners, runner2)
 				}
@@ -339,7 +333,6 @@ func Scan(target *Runner, GoNmap *gonmap.VScan, region *ipinfo.Ip2Region) *resul
 				info, err := ipinfo.GetIpinfo(region, target.Ip)
 				if err != nil {
 					log2.Warn("[GetIPInfo]:", err)
-					fmt.Fprintln(color.Output, color.HiYellowString("[WARN]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GetIPInfo]:", err)
 				}
 				target.Output.City = info.City
 				target.Output.Region = info.Region
@@ -393,7 +386,6 @@ func Scan(target *Runner, GoNmap *gonmap.VScan, region *ipinfo.Ip2Region) *resul
 					info, err := ipinfo.GetIpinfo(region, target.Ip)
 					if err != nil {
 						log2.Warn("[GetIPInfo]:", err)
-						fmt.Fprintln(color.Output, color.HiYellowString("[WARNING]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GetIPInfo]:", err)
 					}
 					target.Output.City = info.City
 					target.Output.Region = info.Region

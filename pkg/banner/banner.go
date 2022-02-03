@@ -17,5 +17,5 @@ func Banner() {
 		"|  _ \\ / _ \\/ _ \\___ \\ / __/ _` | '_ \\\n" +
 		"| |_) |  __/  __/___) | (_| (_| | | | |\n" +
 		"|____/ \\___|\\___|____/ \\___\\__,_|_| |_| version:0.2.0\n" + "\n"
-	fmt.Fprintf(color.Output, color.HiCyanString(banner))
+	_, _ = fmt.Fprintf(color.Output, color.HiCyanString(banner))
 }

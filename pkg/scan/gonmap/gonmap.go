@@ -4,8 +4,6 @@ import (
 	log2 "BeeScan-scan/pkg/log"
 	"embed"
 	"errors"
-	"fmt"
-	"github.com/fatih/color"
 	"log"
 	"net"
 	"regexp"
@@ -982,7 +980,6 @@ func GoNmapInit(f embed.FS) *VScan {
 
 func GoNmapScan(v *VScan, ip string, port string, protocol string) (*Result, error) {
 	log2.Info("[ServerCheck]:", ip)
-	fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[ServerCheck]:", ip)
 	var target Target
 	target.IP = ip
 	target.Port, _ = strconv.Atoi(port)

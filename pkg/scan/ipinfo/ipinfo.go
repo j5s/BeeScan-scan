@@ -4,11 +4,8 @@ import (
 	log2 "BeeScan-scan/pkg/log"
 	"embed"
 	"errors"
-	"fmt"
-	"github.com/fatih/color"
 	"strconv"
 	"strings"
-	"time"
 )
 
 /*
@@ -83,13 +80,11 @@ func getIpInfo(cityId int64, line []byte) IpInfo {
 func IpInfoInit(f embed.FS) *Ip2Region {
 	ip2region, err := New(f)
 	if err != nil {
-		log2.Error(err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[IpInfoInit]:", err)
+		log2.Error("[IpInfoInit]:", err)
 	}
 	ip2region.dbBinStr, err = ip2region.dbFileHandler.ReadFile("ip2region.db")
 	if err != nil {
-		log2.Error(err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[IpInfoInit]:", err)
+		log2.Error("[IpInfoInit]:", err)
 	}
 	return ip2region
 }
@@ -175,7 +170,6 @@ func ip2long(IpStr string) (int64, error) {
 // GetIpinfo 获取IP详细信息
 func GetIpinfo(r *Ip2Region, ip string) (IpInfo, error) {
 	log2.Info("[GetIPInfo]:", ip)
-	fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GetIPInfo]:", ip)
 	ipinfo, err := r.MemorySearch(ip)
 	return ipinfo, err
 }

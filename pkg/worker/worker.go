@@ -9,13 +9,10 @@ import (
 	"BeeScan-scan/pkg/result"
 	"BeeScan-scan/pkg/scan/gonmap"
 	"BeeScan-scan/pkg/scan/ipinfo"
-	"fmt"
-	"github.com/fatih/color"
 	redis2 "github.com/go-redis/redis"
 	"github.com/panjf2000/ants/v2"
 	"go.uber.org/ratelimit"
 	"sync"
-	"time"
 )
 
 /*
@@ -34,35 +31,28 @@ func WorkerInit(nodestate *job.NodeState, taskstate *job.TaskState, wg *sync.Wai
 				rl.Take()
 				if j.(*runner.Runner).Ip != "" {
 					log2.Info("[Scanning]:", j.(*runner.Runner).Ip)
-					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Scanning]:", j.(*runner.Runner).Ip)
-					log2.Info("[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
-					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
+					log2.InfoOutput("[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
 				} else if j.(*runner.Runner).Domain != "" {
 					log2.Info("[Scanning]:", j.(*runner.Runner).Domain)
-					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Scanning]:", j.(*runner.Runner).Domain)
-					log2.Info("[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
-					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
+					log2.InfoOutput("[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
 				}
 				node.NodeUpdate(conn, config.GlobalConfig.NodeConfig.NodeName, nodestate)
 				node.TaskUpdate(conn, taskstate)
-				result := runner.Scan(j.(*runner.Runner), GoNmap, region) // 执行扫描
+				tmpresult := runner.Scan(j.(*runner.Runner), GoNmap, region) // 执行扫描
 				nodestate.Running--
 				taskstate.Running--
 				nodestate.Finished++
 				taskstate.Finished++
 				if j.(*runner.Runner).Ip != "" {
 					log2.Info("[Scanned]:", j.(*runner.Runner).Ip)
-					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Scanned]:", j.(*runner.Runner).Ip)
-					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
+					log2.InfoOutput("[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
 				} else if j.(*runner.Runner).Domain != "" {
 					log2.Info("[Scanning]:", j.(*runner.Runner).Domain)
-					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Scanning]:", j.(*runner.Runner).Domain)
-					log2.Info("[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
-					fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
+					log2.InfoOutput("[Tasks]:", nodestate.Tasks, "[Running]:", nodestate.Running, "[Finished]:", nodestate.Finished)
 				}
 				node.NodeUpdate(conn, config.GlobalConfig.NodeConfig.NodeName, nodestate)
 				node.TaskUpdate(conn, taskstate)
-				tmpresults <- result
+				tmpresults <- tmpresult
 				defer wg.Done()
 			}
 		}

@@ -79,13 +79,14 @@ func (config *Config) LogMaxSize() int {
 func Setup() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:fail to get current path", err)
+		_, _ = fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:fail to get current path", err)
+		os.Exit(1)
 	}
 	// 配置文件
 	configFile := path.Join(dir, "config.yaml")
 
 	if !util.FileExist(configFile) {
-		WriteYamlConfig(configFile)
+		WriteYamlConfig()
 	}
 	ReadYamlConfig(configFile)
 }
@@ -121,29 +122,32 @@ func ReadYamlConfig(configFile string) {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to read 'config.yaml", err)
+		_, _ = fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to read 'config.yaml", err)
+		os.Exit(1)
 	}
 	err = viper.Unmarshal(&GlobalConfig)
 	if err != nil {
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to parse 'config.yaml', check format", err)
+		_, _ = fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to parse 'config.yaml', check format", err)
+		os.Exit(1)
 	}
 	GlobalConfig.NodeConfig.NodeQueue = GlobalConfig.NodeConfig.NodeName + "_queue"
 }
 
-func WriteYamlConfig(configFile string) {
+func WriteYamlConfig() {
 	// 生成默认config
 	viper.SetConfigType("yaml")
 	err := viper.ReadConfig(bytes.NewBuffer(defaultYamlByte))
 	if err != nil {
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to read default config bytes:", err)
+		_, _ = fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to read default config bytes:", err)
 	}
 
 	f, err := os.Create("config.yaml")
 	if err != nil {
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to write config yaml", err)
+		_, _ = fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", "fail to write config yaml", err)
+		os.Exit(1)
 	}
 	_, err = f.Write(defaultYamlByte)
 	if err != nil {
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", err)
+		_, _ = fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[Config_Setup]:", err)
 	}
 }

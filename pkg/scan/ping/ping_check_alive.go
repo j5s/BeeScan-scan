@@ -3,12 +3,9 @@ package ping
 import (
 	log2 "BeeScan-scan/pkg/log"
 	"bytes"
-	"fmt"
-	"github.com/fatih/color"
 	"os/exec"
 	"runtime"
 	"strings"
-	"time"
 )
 
 /*
@@ -20,7 +17,6 @@ import (
 // PingCheckAlive PING检测主机存活
 func PingCheckAlive(host string) bool {
 	log2.Info("[PingCheck]:", host)
-	fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[PingCheck]:", host)
 	sysType := runtime.GOOS
 	if sysType == "windows" {
 		cmd := exec.Command("ping", "-n", "2", host)

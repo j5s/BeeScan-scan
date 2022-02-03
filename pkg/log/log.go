@@ -3,6 +3,7 @@ package log
 import (
 	"BeeScan-scan/pkg/config"
 	"fmt"
+	"github.com/fatih/color"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -66,37 +67,67 @@ func formatArgs(v ...interface{}) string {
 		}
 
 	}
-	// fmt.Println(v, len(v), formatStrings)
 	return strings.Join(formatStrings, " ")
 }
 
-func Info(v ...interface{}) {
-	format := formatArgs(v)
-	sugarInfoLogger.Info("", fmt.Sprintf(format, v...))
+func Info(args ...interface{}) {
+	format := formatArgs(args)
+	sugarInfoLogger.Info("", fmt.Sprintf(format, args...))
+	_, _ = fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
 }
 
-func Error(v ...interface{}) {
-	format := formatArgs(v)
-	sugarErrorLogger.Error("", fmt.Sprintf(format, v...))
+func Error(args ...interface{}) {
+	format := formatArgs(args)
+	sugarErrorLogger.Error("", fmt.Sprintf(format, args...))
+	_, _ = fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
 }
 
-func Errorln(v ...interface{}) {
-	sugarErrorLogger.Error("", fmt.Sprintln(v...))
+func Warn(args ...interface{}) {
+	format := formatArgs(args)
+	sugarErrorLogger.Warn("", fmt.Sprintf(format, args...))
+	_, _ = fmt.Fprintln(color.Output, color.HiYellowString("[WARN]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
 }
 
-func Warn(v ...interface{}) {
-	format := formatArgs(v)
-	sugarErrorLogger.Warn("", fmt.Sprintf(format, v...))
+func Debug(args ...interface{}) {
+	format := formatArgs(args)
+	sugarDebugLogger.Debug("", fmt.Sprintf(format, args...))
+	_, _ = fmt.Fprintln(color.Output, color.HiGreenString("[DEBG]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
 }
 
-func Debug(v ...interface{}) {
-	format := formatArgs(v)
-	sugarDebugLogger.Debug("", fmt.Sprintf(format, v...))
+func Panic(args ...interface{}) {
+	format := formatArgs(args)
+	sugarErrorLogger.Panic("", fmt.Sprintf(format, args...))
+	_, _ = fmt.Fprintln(color.Output, color.HiRedString("[FATA]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
 }
 
-func Panic(v ...interface{}) {
-	format := formatArgs(v)
-	sugarErrorLogger.Panic("", fmt.Sprintf(format, v...))
+func InfoOutput(args ...interface{}) {
+	format := formatArgs(args)
+	_, _ = fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
+}
+
+func WarningOutput(args ...interface{}) {
+	format := formatArgs(args)
+	_, _ = fmt.Fprintln(color.Output, color.HiYellowString("[WARN]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
+}
+
+func ErrorOutput(args ...interface{}) {
+	format := formatArgs(args)
+	_, _ = fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
+}
+
+func DebugOutput(args ...interface{}) {
+	format := formatArgs(args)
+	_, _ = fmt.Fprintln(color.Output, color.HiGreenString("[DEBG]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
+}
+
+func VerboseOutput(args ...interface{}) {
+	format := formatArgs(args)
+	_, _ = fmt.Fprintln(color.Output, color.HiMagentaString("[VEBO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
+}
+
+func FatalOutput(args ...interface{}) {
+	format := formatArgs(args)
+	_, _ = fmt.Fprintln(color.Output, color.HiRedString("[FATA]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", fmt.Sprintf(format, args...))
 }
 
 func createLogger(path string, level zapcore.Level, maxSize int, maxBackups int, maxAge int, compress bool) *zap.SugaredLogger {
@@ -109,7 +140,7 @@ func NewLogger(level zapcore.Level, maxSize int, maxBackups int, maxAge int, com
 	var infoPath, debugPath, errPath, logPath string
 
 	if _, err := os.Stat(config.LogPath()); os.IsNotExist(err) {
-		os.Mkdir(config.LogPath(), 0755)
+		_ = os.Mkdir(config.LogPath(), 0755)
 	}
 
 	if len(config.LogPath()) == 0 {

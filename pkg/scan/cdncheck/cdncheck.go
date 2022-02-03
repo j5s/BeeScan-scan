@@ -4,12 +4,9 @@ import (
 	"BeeScan-scan/pkg/httpx"
 	log2 "BeeScan-scan/pkg/log"
 	"BeeScan-scan/pkg/util"
-	"fmt"
-	"github.com/fatih/color"
 	"github.com/yl2chen/cidranger"
 	"net"
 	"strings"
-	"time"
 )
 
 /*
@@ -840,7 +837,6 @@ func init() {
 // IPCDNCheck ip cdn check
 func IPCDNCheck(ip string) bool {
 	log2.Info("[IPCDNCheck]:", ip)
-	fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[IPCDNCheck]:", ip)
 	// check ip
 	b, err := ranger.Contains(net.ParseIP(ip))
 	if err != nil {

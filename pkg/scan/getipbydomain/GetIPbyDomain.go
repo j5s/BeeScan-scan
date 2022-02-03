@@ -2,8 +2,6 @@ package getipbydomain
 
 import (
 	log2 "BeeScan-scan/pkg/log"
-	"fmt"
-	"github.com/fatih/color"
 	"net"
 	"net/http"
 	"strings"
@@ -88,7 +86,6 @@ func GetIPbyDomain(domain string) string {
 	addr, err := net.ResolveIPAddr("ip", domain)
 	if err != nil {
 		log2.Warn("[GetIPbyDomain]:", err)
-		fmt.Fprintln(color.Output, color.HiYellowString("[WARN]:"), "[GetIPbyDomain]:", err)
 	}
 	if addr != nil {
 		if addr.IP.IsPrivate() != true {

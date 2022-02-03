@@ -3,7 +3,6 @@ package tcp
 import (
 	log2 "BeeScan-scan/pkg/log"
 	"fmt"
-	"github.com/fatih/color"
 	"net"
 	"time"
 )
@@ -36,7 +35,6 @@ var (
 // TcpCheckAlive TCP检测主机存活
 func TcpCheckAlive(host string, port string) bool {
 	log2.Info("[TcpCheck]:", host)
-	fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[TcpCheck]:", host)
 
 	conn, err := net.DialTimeout("tcp", fmt.Sprintf("%s:%s", host, port), 3*time.Second)
 	if conn != nil {

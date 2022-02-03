@@ -8,8 +8,6 @@ package icmp
 
 import (
 	log2 "BeeScan-scan/pkg/log"
-	"fmt"
-	"github.com/fatih/color"
 	"net"
 	"time"
 )
@@ -18,10 +16,8 @@ import (
 func IcmpCheckAlive(host string, ip string) bool {
 	if ip != "" {
 		log2.Info("[IcmpCheck]:", ip)
-		fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[IcmpCheck]:", ip)
 	} else {
 		log2.Info("[IcmpCheck]:", host)
-		fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[IcmpCheck]:", host)
 	}
 	size := 32
 	var seq int16 = 1
@@ -32,7 +28,6 @@ func IcmpCheckAlive(host string, ip string) bool {
 	conn, err := net.DialTimeout("ip4:icmp", host, 3*time.Second)
 	if err != nil {
 		log2.Warn("[IcmpCheck]", err)
-		fmt.Fprintln(color.Output, color.HiYellowString("[WARN]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[IcmpCheck]:", err)
 		return false
 	}
 	defer conn.Close()

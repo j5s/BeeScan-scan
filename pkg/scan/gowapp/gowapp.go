@@ -6,10 +6,8 @@ import (
 	"BeeScan-scan/pkg/scan/httpcheck"
 	"embed"
 	"fmt"
-	"github.com/fatih/color"
 	gowap "github.com/jiaocoll/GoWapp/pkg/core"
 	"os"
-	"time"
 )
 
 /*
@@ -69,7 +67,6 @@ func GowappInit(f embed.FS) (*gowap.Wappalyzer, error) {
 	wapp, err := gowap.Init(wapconfig, f)
 	if err != nil {
 		log2.Error("[GoWappInit]:", err)
-		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GoWappInit]:", err)
 		os.Exit(1)
 	}
 	return wapp, nil
@@ -78,7 +75,13 @@ func GowappInit(f embed.FS) (*gowap.Wappalyzer, error) {
 // GoWapp Wappalyzer识别模块
 func GoWapp(r *result.Output, wapp *gowap.Wappalyzer) *gowap.Output {
 	if httpcheck.HttpCheck(r.Domain, r.Port, r.Ip) {
-		fmt.Fprintln(color.Output, color.HiCyanString("[INFO]"), "["+time.Now().Format("2006-01-02 15:04:05")+"]", "[GoWapp]:", r.Ip)
+		if r != nil {
+			if r.Ip != "" {
+				log2.Info("[GoWapp]:", r.Ip)
+			} else if r.Ip == "" && r.Domain != "" {
+				log2.Info("[GoWapp]:", r.Domain)
+			}
+		}
 		var fullUrl string
 		targetinfo := &gowap.Output{}
 		protocol := "http"
