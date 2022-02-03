@@ -11,7 +11,6 @@ import (
 	"github.com/fatih/color"
 	"github.com/olivere/elastic/v7"
 	"io/ioutil"
-	"log"
 	"os"
 	"time"
 )
@@ -125,7 +124,7 @@ func QueryLogByID(client *elastic.Client, nodename string) string {
 	var TheNodeLog NodeLog
 	res, err = client.Get().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(nodename + "_log").Do(context.Background())
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[ESQueryLog]:", err)
 	}
 
 	if res != nil {
@@ -133,7 +132,7 @@ func QueryLogByID(client *elastic.Client, nodename string) string {
 			if res.Source != nil {
 				err = json.Unmarshal(res.Source, &TheNodeLog)
 				if err != nil {
-					log.Println(err)
+					fmt.Fprintln(color.Output, color.HiRedString("[ERRO]"), "[ESQueryLog]:", err)
 				}
 			}
 		}
