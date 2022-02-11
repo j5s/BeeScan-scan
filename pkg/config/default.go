@@ -12,11 +12,6 @@ NodeConfig:
   # 节点名称配置
   NodeName: BeeScan_node_1
 
-# 字典配置
-DicConfig:
-  Dic_user: 
-  Dic_pwd:
-
 # 任务池配置
 WorkerConfig:
   #任务池数量
