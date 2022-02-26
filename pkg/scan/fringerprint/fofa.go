@@ -94,11 +94,11 @@ func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port s
 
 		if response.TLSData != nil {
 			var cert string
-			cert += util.StrToSlince(response.TLSData.DNSNames)
-			cert += util.StrToSlince(response.TLSData.IssuerCommonName)
-			cert += util.StrToSlince(response.TLSData.Organization)
-			cert += util.StrToSlince(response.TLSData.CommonName)
-			cert += util.StrToSlince(response.TLSData.Emails)
+			cert += util.StrToSlince(response.TLSData.DNSNames) + "\n"
+			cert += util.StrToSlince(response.TLSData.IssuerCommonName) + "\n"
+			cert += util.StrToSlince(response.TLSData.Organization) + "\n"
+			cert += util.StrToSlince(response.TLSData.CommonName) + "\n"
+			cert += util.StrToSlince(response.TLSData.Emails) + "\n"
 			cert += util.StrToSlince(response.TLSData.IssuerOrg)
 			paramters["cert"] = cert
 		} else {
@@ -219,12 +219,12 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 		var cert string
 		if resp != nil {
 			if resp.TLSData != nil {
-				cert += util.StrToSlince(resp.TLSData.DNSNames)
-				cert += util.StrToSlince(resp.TLSData.IssuerCommonName)
-				cert += util.StrToSlince(resp.TLSData.Organization)
-				cert += util.StrToSlince(resp.TLSData.CommonName)
-				cert += util.StrToSlince(resp.TLSData.Emails)
-				cert += util.StrToSlince(resp.TLSData.IssuerOrg)
+				cert += util.StrToSlince(resp.TLSData.DNSNames) + "\n"
+				cert += util.StrToSlince(resp.TLSData.IssuerCommonName) + "\n"
+				cert += util.StrToSlince(resp.TLSData.Organization) + "\n"
+				cert += util.StrToSlince(resp.TLSData.CommonName) + "\n"
+				cert += util.StrToSlince(resp.TLSData.Emails) + "\n"
+				cert += util.StrToSlince(resp.TLSData.IssuerOrg) + "\n"
 			}
 		}
 		return strings.Index(cert, pattern) != -1, nil

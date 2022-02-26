@@ -1,7 +1,5 @@
 package main
 
-import "BeeScan-scan/pkg/log"
-
 /*
 创建人员：云深不知处
 创建时间：2022/1/4
@@ -9,5 +7,5 @@ import "BeeScan-scan/pkg/log"
 */
 
 func main() {
-	log.Info("[aaaaaaa]", "ok!")
+
 }
