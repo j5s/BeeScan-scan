@@ -34,7 +34,7 @@ var FofaJson []byte
 
 func FOFAInit(f embed.FS) *FofaPrints {
 	var err error
-	FofaJson, err = f.ReadFile("goby.json")
+	FofaJson, err = f.ReadFile("goby2.json")
 	if err != nil {
 		log2.Error("[FOFAInit]:", err)
 	}
@@ -94,11 +94,11 @@ func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port s
 
 		if response.TLSData != nil {
 			var cert string
-			cert += util.StrToSlince(response.TLSData.DNSNames) + "\n"
-			cert += util.StrToSlince(response.TLSData.IssuerCommonName) + "\n"
-			cert += util.StrToSlince(response.TLSData.Organization) + "\n"
-			cert += util.StrToSlince(response.TLSData.CommonName) + "\n"
-			cert += util.StrToSlince(response.TLSData.Emails) + "\n"
+			cert += util.StrToSlince(response.TLSData.DNSNames) + " "
+			cert += util.StrToSlince(response.TLSData.IssuerCommonName) + " "
+			cert += util.StrToSlince(response.TLSData.Organization) + " "
+			cert += util.StrToSlince(response.TLSData.CommonName) + " "
+			cert += util.StrToSlince(response.TLSData.Emails) + " "
 			cert += util.StrToSlince(response.TLSData.IssuerOrg)
 			paramters["cert"] = cert
 		} else {
@@ -149,7 +149,6 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 		}
 		return strings.Index(title, pattern) != -1, nil
 	}
-
 	functions["body_contains"] = func(args ...interface{}) (interface{}, error) {
 		pattern := strings.ToLower(toString(args[0]))
 		var data string
@@ -166,17 +165,13 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 	functions["protocol_contains"] = func(args ...interface{}) (interface{}, error) {
 		pattern := strings.ToLower(toString(args[0]))
 		var protocol string
-		if gomapres != nil {
-			if gomapres.Service.Protocol != "" {
+		if resp != nil {
+			if gomapres != nil {
 				protocol = strings.ToLower(gomapres.Service.Protocol)
-			}
-			if resp != nil {
-				if gomapres.Service.Protocol == "" && resp.HeaderStr != "" {
-					protocol = "http"
-				}
+			} else if protocol == "" && resp.HeaderStr != "" {
+				protocol = "http"
 			}
 		}
-
 		return strings.Index(protocol, pattern) != -1, nil
 	}
 
@@ -184,10 +179,7 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 		pattern := strings.ToLower(toString(args[0]))
 		var banner string
 		if gomapres != nil {
-
-			if gomapres.Banner != "" {
-				banner = strings.ToLower(gomapres.Banner)
-			}
+			banner = strings.ToLower(gomapres.Banner)
 		}
 		return strings.Index(banner, pattern) != -1, nil
 	}
@@ -219,12 +211,13 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 		var cert string
 		if resp != nil {
 			if resp.TLSData != nil {
-				cert += util.StrToSlince(resp.TLSData.DNSNames) + "\n"
-				cert += util.StrToSlince(resp.TLSData.IssuerCommonName) + "\n"
-				cert += util.StrToSlince(resp.TLSData.Organization) + "\n"
-				cert += util.StrToSlince(resp.TLSData.CommonName) + "\n"
-				cert += util.StrToSlince(resp.TLSData.Emails) + "\n"
-				cert += util.StrToSlince(resp.TLSData.IssuerOrg) + "\n"
+				cert += util.StrToSlince(resp.TLSData.DNSNames) + " "
+				cert += util.StrToSlince(resp.TLSData.IssuerCommonName) + " "
+				cert += util.StrToSlince(resp.TLSData.Organization) + " "
+				cert += util.StrToSlince(resp.TLSData.CommonName) + " "
+				cert += util.StrToSlince(resp.TLSData.Emails) + " "
+				cert += util.StrToSlince(resp.TLSData.IssuerOrg)
+				cert = strings.ToLower(cert)
 			}
 		}
 		return strings.Index(cert, pattern) != -1, nil

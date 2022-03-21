@@ -11,13 +11,14 @@ var defaultYamlByte = []byte(`
 NodeConfig:
   # 节点名称配置
   NodeName: BeeScan_node_1
+  NodeQueue: BeeScan_node_1_queue
 
 # 任务池配置
 WorkerConfig:
   #任务池数量
-  WorkerNumber: 10
+  WorkerNumber: 5
   # 速率配置(每秒最多运行任务数)
-  Thread: 5
+  Thread: 3
 
 # Log配置
 LogConfig:

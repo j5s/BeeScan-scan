@@ -10,6 +10,7 @@ import (
 	"github.com/olivere/elastic/v7"
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -115,9 +116,12 @@ func QueryLogByID(client *elastic.Client, nodename string) string {
 	var res *elastic.GetResult
 	var err error
 	var TheNodeLog NodeLog
-	res, err = client.Get().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(nodename + "_log").Do(context.Background())
+	id := nodename + "_log"
+	res, err = client.Get().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(id).Do(context.Background())
 	if err != nil {
-		log2.Error("[ESQueryLog]:", err)
+		if strings.Contains(err.Error(), "Not Found") {
+			ESLogAdd(client, "BeeScanLogs.log")
+		}
 	}
 
 	if res != nil {

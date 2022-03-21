@@ -50,6 +50,7 @@ func NewRunner(ip string, port string, domain string, protocol string, FofaPrint
 		Port:     port,
 		Domain:   domain,
 		Protocol: protocol,
+		Output:   &result.Output{},
 	}
 	if hm, err := hybrid.New(hybrid.DefaultDiskOptions); err != nil {
 		runner.Hm = nil
@@ -305,13 +306,15 @@ func Scan(target *Runner, GoNmap *gonmap.VScan, region *ipinfo.Ip2Region) *resul
 			if tcp.TcpCheckAlive(target.Ip, target.Port) {
 				// 普通端口探测
 				nmapbanner, err := gonmap.GoNmapScan(GoNmap, target.Ip, target.Port, target.Protocol)
-
-				target.Output.Servers = nmapbanner
+				if nmapbanner != nil {
+					target.Output.Servers = nmapbanner
+				}
 				if strings.Contains(target.Output.Servers.Banner, "HTTP") {
 					target.Output.Servers.Name = "http"
 					target.Output.Servername = "http"
 				} else {
 					target.Output.Servername = nmapbanner.Name
+
 				}
 				// web端口探测
 				webresult := result.FingerResult{}
@@ -359,7 +362,9 @@ func Scan(target *Runner, GoNmap *gonmap.VScan, region *ipinfo.Ip2Region) *resul
 				if tcp.TcpCheckAlive(target.Ip, target.Port) {
 					// 普通端口探测
 					nmapbanner, err := gonmap.GoNmapScan(GoNmap, target.Ip, target.Port, target.Protocol)
-					target.Output.Servers = nmapbanner
+					if nmapbanner != nil {
+						target.Output.Servers = nmapbanner
+					}
 					if strings.Contains(target.Output.Servers.Banner, "HTTP") {
 						target.Output.Servers.Name = "http"
 						target.Output.Servername = "http"
