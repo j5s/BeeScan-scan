@@ -21121,3 +21121,104 @@
 {"level":"info","time":"2022-03-14 18:48:04","msg":"[Scanned]: 210.45.192.122"}
 {"level":"info","time":"2022-03-14 18:48:04","msg":"[HttpCheck]: 210.45.192.122"}
 {"level":"info","time":"2022-03-14 18:48:04","msg":"[GoWapp]: 210.45.192.122"}
+{"level":"info","time":"2022-03-29 09:44:50","msg":"[targets]: [http://testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 09:45:30","msg":"[targets]: [testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 09:45:31","msg":"[Scanning]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 09:45:31","msg":"[IcmpCheck]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 09:45:31","msg":"[IcmpCheck] dial ip4:icmp 44.228.249.3: socket: operation not permitted"}
+{"level":"info","time":"2022-03-29 09:45:31","msg":"[PingCheck]: testphp.vulnweb.com"}
+{"level":"info","time":"2022-03-29 09:45:32","msg":"[TcpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 09:45:33","msg":"[ServerCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 09:45:37","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 09:45:37","msg":"[HttpRequest]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 09:45:46","msg":"[CDNCheck]: not found cdn"}
+{"level":"info","time":"2022-03-29 09:45:46","msg":"[GetIPInfo]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 09:45:46","msg":"[Scanned]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 09:45:46","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 09:45:46","msg":"[GoWapp]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 15:56:19","msg":"[targets]: [testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 15:56:20","msg":"[Scanning]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 15:56:20","msg":"[IcmpCheck]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 15:56:20","msg":"[IcmpCheck] dial ip4:icmp 44.228.249.3: socket: operation not permitted"}
+{"level":"info","time":"2022-03-29 15:56:20","msg":"[PingCheck]: testphp.vulnweb.com"}
+{"level":"info","time":"2022-03-29 15:56:21","msg":"[TcpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 15:56:21","msg":"[ServerCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 15:56:25","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 15:56:26","msg":"[HttpRequest]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 15:56:34","msg":"[CDNCheck]: not found cdn"}
+{"level":"info","time":"2022-03-29 15:56:34","msg":"[GetIPInfo]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 15:56:34","msg":"[Scanned]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 15:56:34","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 15:56:34","msg":"[GoWapp]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:22","msg":"[targets]: [testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 16:09:22","msg":"[Scanning]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:22","msg":"[IcmpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:23","msg":"[TcpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:23","msg":"[ServerCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:27","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:27","msg":"[HttpRequest]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 16:09:34","msg":"[CDNCheck]: not found cdn"}
+{"level":"info","time":"2022-03-29 16:09:34","msg":"[GetIPInfo]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:34","msg":"[Scanned]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:34","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:09:34","msg":"[GoWapp]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:26","msg":"[targets]: [testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 16:22:26","msg":"[Scanning]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:26","msg":"[IcmpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:26","msg":"[TcpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:26","msg":"[ServerCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:31","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:31","msg":"[HttpRequest]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 16:22:41","msg":"[CDNCheck]: not found cdn"}
+{"level":"info","time":"2022-03-29 16:22:42","msg":"[GetIPInfo]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:42","msg":"[Scanned]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:42","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:22:42","msg":"[GoWapp]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:25:47","msg":"[targets]: [testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 16:25:48","msg":"[Scanning]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:25:48","msg":"[IcmpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:25:48","msg":"[TcpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:25:48","msg":"[ServerCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:25:52","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:25:53","msg":"[HttpRequest]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 16:26:01","msg":"[CDNCheck]: not found cdn"}
+{"level":"info","time":"2022-03-29 16:26:01","msg":"[GetIPInfo]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:26:01","msg":"[Scanned]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:26:01","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:26:02","msg":"[GoWapp]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:20","msg":"[targets]: [testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 16:29:20","msg":"[Scanning]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:20","msg":"[IcmpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:20","msg":"[TcpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:20","msg":"[ServerCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:26","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:26","msg":"[HttpRequest]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 16:29:30","msg":"[CDNCheck]: not found cdn"}
+{"level":"info","time":"2022-03-29 16:29:30","msg":"[GetIPInfo]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:30","msg":"[Scanned]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:30","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:29:30","msg":"[GoWapp]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:31:51","msg":"[targets]: [testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 16:31:52","msg":"[Scanning]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:31:52","msg":"[IcmpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:31:52","msg":"[TcpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:31:52","msg":"[ServerCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:31:56","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:31:57","msg":"[HttpRequest]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 16:32:05","msg":"[CDNCheck]: not found cdn"}
+{"level":"info","time":"2022-03-29 16:32:05","msg":"[GetIPInfo]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:32:05","msg":"[Scanned]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:32:05","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:32:05","msg":"[GoWapp]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:16","msg":"[targets]: [testphp.vulnweb.com:80]"}
+{"level":"info","time":"2022-03-29 16:51:16","msg":"[Scanning]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:16","msg":"[IcmpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:16","msg":"[TcpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:16","msg":"[ServerCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:20","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:21","msg":"[HttpRequest]: 44.228.249.3"}
+{"level":"warn","time":"2022-03-29 16:51:28","msg":"[CDNCheck]: not found cdn"}
+{"level":"info","time":"2022-03-29 16:51:28","msg":"[GetIPInfo]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:28","msg":"[Scanned]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:28","msg":"[HttpCheck]: 44.228.249.3"}
+{"level":"info","time":"2022-03-29 16:51:29","msg":"[GoWapp]: 44.228.249.3"}

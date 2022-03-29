@@ -139,7 +139,9 @@ func main() {
 			for i := 0; i < len(results); i++ {
 				res := <-results
 				if res != nil {
-					db.EsAdd(esclient, res)
+					if res.Target != "" {
+						db.EsAdd(esclient, res)
+					}
 				}
 			}
 		}
