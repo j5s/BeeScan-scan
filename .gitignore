@@ -1,3 +1,7 @@
-.idea
+.idea/
 .DS_Store
 dist/
+nmap-probes
+wapp.json
+goby.json
+ip2region.db

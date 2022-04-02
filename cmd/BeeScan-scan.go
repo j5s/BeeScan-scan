@@ -32,7 +32,7 @@ import (
 程序功能：主函数
 */
 
-//go:embed nmap-probes wapp.json goby2.json ip2region.db
+//go:embed nmap-probes wapp.json goby.json ip2region.db
 var f embed.FS
 
 var (
