@@ -63,7 +63,7 @@ func ESLogAdd(client *elastic.Client, filename string) {
 		}
 		TheNodeLog.Log = string(logs)
 		TheNodeLog.LastTime = time.Now().Format("2006-01-02 15:04:05")
-		_, err = client.Update().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(config.GlobalConfig.NodeConfig.NodeName + "_log").Doc(TheNodeLog).Upsert(TheNodeLog).Refresh("true").Do(context.Background())
+		_, err = client.Update().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index + "_log").Id(config.GlobalConfig.NodeConfig.NodeName + "_log").Doc(TheNodeLog).Upsert(TheNodeLog).Refresh("true").Do(context.Background())
 		if err != nil {
 			log2.Error("[ESLogAdd]:", err)
 		}
@@ -117,7 +117,7 @@ func QueryLogByID(client *elastic.Client, nodename string) string {
 	var err error
 	var TheNodeLog NodeLog
 	id := nodename + "_log"
-	res, err = client.Get().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(id).Do(context.Background())
+	res, err = client.Get().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index + "_log").Id(id).Do(context.Background())
 	if err != nil {
 		if strings.Contains(err.Error(), "Not Found") {
 			ESLogAdd(client, "BeeScanLogs.log")

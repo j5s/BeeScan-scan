@@ -44,9 +44,9 @@ func GowappConfig() *gowap.Config {
 	//Create a Config object and customize it
 	wapconfig := gowap.NewConfig()
 	//Timeout in seconds for fetching the url
-	wapconfig.TimeoutSeconds = 10
+	wapconfig.TimeoutSeconds = 20
 	//Timeout in seconds for loading the page
-	wapconfig.LoadingTimeoutSeconds = 10
+	wapconfig.LoadingTimeoutSeconds = 20
 	//Don't analyze page when depth superior to this number. Default (0) means no recursivity (only first page will be analyzed)
 	wapconfig.MaxDepth = 0
 	//Max number of pages to visit. Exit when reached

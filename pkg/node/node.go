@@ -9,7 +9,7 @@ import (
 /*
 创建人员：云深不知处
 创建时间：2022/1/5
-程序功能：节点
+程序功能：节点模块
 */
 
 var state map[string]interface{}
