@@ -21222,3 +21222,29 @@
 {"level":"info","time":"2022-03-29 16:51:28","msg":"[Scanned]: 44.228.249.3"}
 {"level":"info","time":"2022-03-29 16:51:28","msg":"[HttpCheck]: 44.228.249.3"}
 {"level":"info","time":"2022-03-29 16:51:29","msg":"[GoWapp]: 44.228.249.3"}
+{"level":"info","time":"2022-04-01 15:27:48","msg":"[targets]: [hebut.edu.cn:80]"}
+{"level":"info","time":"2022-04-01 15:27:50","msg":"[Scanning]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:27:50","msg":"[IcmpCheck]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:27:55","msg":"[PingCheck]: hebut.edu.cn"}
+{"level":"info","time":"2022-04-01 15:28:07","msg":"[HttpCheck]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:28:07","msg":"[TcpCheck]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:28:08","msg":"[ServerCheck]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:28:12","msg":"[HttpCheck]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:28:12","msg":"[HttpRequest]: 115.24.175.50"}
+{"level":"warn","time":"2022-04-01 15:28:36","msg":"[CDNCheck]: not found cdn"}
+{"level":"warn","time":"2022-04-01 15:28:36","msg":"[FOFAFinger]: No parameter 'server' found."}
+{"level":"info","time":"2022-04-01 15:28:36","msg":"[GetIPInfo]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:28:36","msg":"[Scanned]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:28:36","msg":"[HttpCheck]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:28:36","msg":"[GoWapp]: 115.24.175.50"}
+{"level":"info","time":"2022-04-01 15:29:19","msg":"[targets]: [buaa.edu.cn:80]"}
+{"level":"info","time":"2022-04-01 15:29:20","msg":"[Scanning]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:20","msg":"[IcmpCheck]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:20","msg":"[TcpCheck]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:20","msg":"[ServerCheck]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:23","msg":"[HttpCheck]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:23","msg":"[HttpRequest]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:35","msg":"[GetIPInfo]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:35","msg":"[Scanned]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:35","msg":"[HttpCheck]: 106.39.41.16"}
+{"level":"info","time":"2022-04-01 15:29:35","msg":"[GoWapp]: 106.39.41.16"}
