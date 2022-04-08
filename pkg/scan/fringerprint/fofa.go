@@ -53,7 +53,7 @@ func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port s
 		return false, err
 	}
 	paramters := make(map[string]interface{})
-	if response != nil && gomapres != nil {
+	if response != nil {
 		if response.Title != "" {
 			paramters["title"] = response.Title
 		} else {
@@ -62,14 +62,22 @@ func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port s
 
 		if response.GetHeader("server") != "" {
 			paramters["server"] = response.GetHeader("server")
-		} else if response.GetHeader("server") == "" && gomapres.Name != "" {
-			paramters["server"] = gomapres.Service.Name
+		} else if response.GetHeader("server") == "" && gomapres != nil {
+			if gomapres.Service.Name != "" {
+				paramters["server"] = gomapres.Service.Name
+			} else {
+				paramters["server"] = ""
+			}
 		} else {
 			paramters["server"] = ""
 		}
 
-		if gomapres.Service.Protocol != "" {
-			paramters["protocol"] = gomapres.Service.Protocol
+		if gomapres != nil {
+			if gomapres.Service.Protocol != "" {
+				paramters["protocol"] = gomapres.Service.Protocol
+			} else {
+				paramters["protocol"] = "http"
+			}
 		} else {
 			paramters["protocol"] = "http"
 		}
@@ -86,8 +94,12 @@ func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port s
 			paramters["body"] = ""
 		}
 
-		if gomapres.Banner != "" {
-			paramters["banner"] = gomapres.Banner
+		if gomapres != nil {
+			if gomapres.Banner != "" {
+				paramters["banner"] = gomapres.Banner
+			} else {
+				paramters["banner"] = ""
+			}
 		} else {
 			paramters["banner"] = ""
 		}
