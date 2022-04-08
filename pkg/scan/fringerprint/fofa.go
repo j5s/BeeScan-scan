@@ -34,7 +34,7 @@ var FofaJson []byte
 
 func FOFAInit(f embed.FS) *FofaPrints {
 	var err error
-	FofaJson, err = f.ReadFile("goby2.json")
+	FofaJson, err = f.ReadFile("goby.json")
 	if err != nil {
 		log2.Error("[FOFAInit]:", err)
 	}
@@ -180,6 +180,8 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 		var banner string
 		if gomapres != nil {
 			banner = strings.ToLower(gomapres.Banner)
+		} else {
+			banner = ""
 		}
 		return strings.Index(banner, pattern) != -1, nil
 	}
@@ -202,6 +204,8 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 		var server string
 		if resp != nil {
 			server = resp.GetHeader("server")
+		} else {
+			server = ""
 		}
 		return strings.Index(server, pattern) != -1, nil
 	}
@@ -218,9 +222,10 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 				cert += util.StrToSlince(resp.TLSData.Emails) + " "
 				cert += util.StrToSlince(resp.TLSData.IssuerOrg)
 				cert = strings.ToLower(cert)
+				return strings.Index(cert, pattern) != -1, nil
 			}
 		}
-		return strings.Index(cert, pattern) != -1, nil
+		return false, nil
 	}
 
 	functions["port_contains"] = func(args ...interface{}) (interface{}, error) {
