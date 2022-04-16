@@ -60,9 +60,9 @@ func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port s
 			paramters["title"] = ""
 		}
 
-		if response.GetHeader("server") != "" {
-			paramters["server"] = response.GetHeader("server")
-		} else if response.GetHeader("server") == "" && gomapres != nil {
+		if response.GetHeader("Server") != "" {
+			paramters["server"] = response.GetHeader("Server")
+		} else if response.GetHeader("Server") == "" && gomapres != nil {
 			if gomapres.Service.Name != "" {
 				paramters["server"] = gomapres.Service.Name
 			} else {

@@ -108,7 +108,6 @@ func (r *Runner) Request() result.FingerResult {
 		} else {
 			fullUrl = fmt.Sprintf("%s://%s:%s", protocol, r.Ip, r.Port)
 		}
-
 		timeStart := time.Now()
 
 		resp = &httpx.Response{}
@@ -125,6 +124,7 @@ func (r *Runner) Request() result.FingerResult {
 				goto retry
 			}
 		}
+
 		builder := &strings.Builder{}
 		builder.WriteString(fullUrl)
 
