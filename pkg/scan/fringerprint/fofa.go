@@ -84,8 +84,10 @@ func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port s
 
 		if response.HeaderStr != "" {
 			paramters["header"] = response.HeaderStr
+			paramters["banner"] = response.HeaderStr
 		} else {
 			paramters["header"] = ""
+			paramters["banner"] = ""
 		}
 
 		if response.DataStr != "" {
@@ -94,24 +96,17 @@ func (f *Fofa) Matcher(response *httpx.Response, gomapres *gonmap.Result, port s
 			paramters["body"] = ""
 		}
 
-		if gomapres != nil {
-			if gomapres.Banner != "" {
-				paramters["banner"] = gomapres.Banner
-			} else {
-				paramters["banner"] = ""
-			}
-		} else {
-			paramters["banner"] = ""
-		}
-
 		if response.TLSData != nil {
 			var cert string
-			cert += util.StrToSlince(response.TLSData.DNSNames) + " "
-			cert += util.StrToSlince(response.TLSData.IssuerCommonName) + " "
-			cert += util.StrToSlince(response.TLSData.Organization) + " "
-			cert += util.StrToSlince(response.TLSData.CommonName) + " "
-			cert += util.StrToSlince(response.TLSData.Emails) + " "
-			cert += util.StrToSlince(response.TLSData.IssuerOrg)
+			cert += "dnsnames: " + util.StrToSlince(response.TLSData.DNSNames) + " "
+			cert += "issuercommonname: " + util.StrToSlince(response.TLSData.IssuerCommonName) + " "
+			cert += "organization: " + util.StrToSlince(response.TLSData.Organization) + " "
+			cert += "commonname: " + util.StrToSlince(response.TLSData.CommonName) + " "
+			cert += "email address: " + util.StrToSlince(response.TLSData.EmailAddresses) + " "
+			cert += "issuerOrg: " + util.StrToSlince(response.TLSData.IssuerOrg)
+			cert += "organizational unit: " + util.StrToSlince(response.TLSData.OrganizationalUnit)
+			cert += "issuer: " + util.StrToSlince(response.TLSData.Issuer)
+			cert += "subject: " + util.StrToSlince(response.TLSData.Subject)
 			paramters["cert"] = cert
 		} else {
 			paramters["cert"] = ""
@@ -190,8 +185,8 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 	functions["banner_contains"] = func(args ...interface{}) (interface{}, error) {
 		pattern := strings.ToLower(toString(args[0]))
 		var banner string
-		if gomapres != nil {
-			banner = strings.ToLower(gomapres.Banner)
+		if resp != nil {
+			banner = strings.ToLower(resp.HeaderStr)
 		} else {
 			banner = ""
 		}
@@ -227,13 +222,15 @@ func HelperFunctions(resp *httpx.Response, gomapres *gonmap.Result, port string)
 		var cert string
 		if resp != nil {
 			if resp.TLSData != nil {
-				cert += util.StrToSlince(resp.TLSData.DNSNames) + " "
-				cert += util.StrToSlince(resp.TLSData.IssuerCommonName) + " "
-				cert += util.StrToSlince(resp.TLSData.Organization) + " "
-				cert += util.StrToSlince(resp.TLSData.CommonName) + " "
-				cert += util.StrToSlince(resp.TLSData.Emails) + " "
-				cert += util.StrToSlince(resp.TLSData.IssuerOrg)
-				cert = strings.ToLower(cert)
+				cert += "dnsnames: " + util.StrToSlince(resp.TLSData.DNSNames) + "/n"
+				cert += "issuercommonname: " + util.StrToSlince(resp.TLSData.IssuerCommonName) + "/n"
+				cert += "organization: " + util.StrToSlince(resp.TLSData.Organization) + "/n"
+				cert += "commonname: " + util.StrToSlince(resp.TLSData.CommonName) + "/n"
+				cert += "email address: " + util.StrToSlince(resp.TLSData.EmailAddresses) + "/n"
+				cert += "issuerOrg: " + util.StrToSlince(resp.TLSData.IssuerOrg) + "/n"
+				cert += "organizational unit: " + util.StrToSlince(resp.TLSData.OrganizationalUnit) + "/n"
+				cert += "issuer: " + util.StrToSlince(resp.TLSData.Issuer) + "/n"
+				cert += "subject: " + util.StrToSlince(resp.TLSData.Subject) + "/n"
 				return strings.Index(cert, pattern) != -1, nil
 			}
 		}

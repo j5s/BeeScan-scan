@@ -187,12 +187,15 @@ func (r *Runner) Request() result.FingerResult {
 				}
 			} else {
 				tlsdata := &httpx.TLSData{
-					DNSNames:         nil,
-					Emails:           nil,
-					CommonName:       nil,
-					Organization:     nil,
-					IssuerCommonName: nil,
-					IssuerOrg:        nil,
+					DNSNames:           nil,
+					EmailAddresses:     nil,
+					CommonName:         nil,
+					Organization:       nil,
+					IssuerCommonName:   nil,
+					IssuerOrg:          nil,
+					OrganizationalUnit: nil,
+					Issuer:             nil,
+					Subject:            nil,
 				}
 				webbanner = result.FingerResult{
 					Title:         title,

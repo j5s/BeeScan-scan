@@ -956,7 +956,6 @@ var (
 
 func gonmapinit() {
 	verbose = 0
-	routines = 20
 	scanRarity = 7
 	scanSendTimeout = 3
 	scanReadTimeout = 3

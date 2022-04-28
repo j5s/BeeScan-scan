@@ -36,6 +36,7 @@ func NodeUpdate(c *redis2.Client, nodename string, nodestate *job.NodeState) {
 	c.HSet(nodename, "running", nodestate.Running)
 	c.HSet(nodename, "finished", nodestate.Finished)
 	c.HSet(nodename, "state", nodestate.State)
+	c.HSet(nodename, "starttime", nodestate.StartTime)
 	c.HSet(nodename, "lasttime", time.Now().Format("2006-01-02 15:04:05"))
 }
 
