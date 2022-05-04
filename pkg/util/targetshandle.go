@@ -16,12 +16,13 @@ import (
 func TargetsHandle(target string) []string {
 	var targets []string
 	if strings.Contains(target, "https") {
-		ip := target[12:]
-		targets = append(targets, ip)
-
+		tmptarget := target[8:]
+		tmpip := strings.Split(tmptarget, ":")
+		targets = append(targets, tmpip[0])
 	} else if strings.Contains(target, "http") {
-		ip := target[11:]
-		targets = append(targets, ip)
+		tmptarget := target[7:]
+		tmpip := strings.Split(tmptarget, ":")
+		targets = append(targets, tmpip[0])
 	} else if (strings.Contains(target, "com") || strings.Contains(target, "cn")) && strings.Contains(target, "www.") {
 		ip := target[4:]
 		targets = append(targets, ip)

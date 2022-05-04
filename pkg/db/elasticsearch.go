@@ -42,7 +42,6 @@ func ElasticSearchInit() *elastic.Client {
 
 // EsAdd 添加结果到es数据库
 func EsAdd(client *elastic.Client, res *result.Output) {
-
 	// 文档件存在则更新，否则插入
 	_, err := client.Update().Index(config.GlobalConfig.DBConfig.Elasticsearch.Index).Id(res.Ip + "-" + res.Port + "-" + res.Domain).Doc(res).Upsert(res).Refresh("true").Do(context.Background())
 	if err != nil {

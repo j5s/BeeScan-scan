@@ -16,50 +16,91 @@ import (
 func IcmpCheckAlive(host string, ip string) bool {
 	if ip != "" {
 		log2.Info("[IcmpCheck]:", ip)
+		size := 32
+		var seq int16 = 1
+		const EchoRequestHeadLen = 8
+		const EchoReplyHeadLen = 20
+
+		startTime := time.Now()
+		conn, err := net.DialTimeout("ip4:icmp", ip, 3*time.Second)
+		if err != nil {
+			log2.Warn("[IcmpCheck]", err)
+			return false
+		}
+		defer conn.Close()
+		id0, id1 := genIdentifier(ip)
+
+		msg := make([]byte, size+EchoRequestHeadLen)
+		msg[0] = 8
+		msg[1] = 0
+		msg[2] = 0
+		msg[3] = 0
+		msg[4], msg[5] = id0, id1
+		msg[6], msg[7] = genSequence(seq)
+
+		length := size + EchoRequestHeadLen
+
+		check := checkSum(msg[0:length])
+		msg[2] = byte(check >> 8)
+		msg[3] = byte(check & 255)
+
+		if err := conn.SetDeadline(startTime.Add(5 * time.Second)); err != nil {
+			return false
+		}
+
+		if _, err := conn.Write(msg[0:length]); err != nil {
+			return false
+		}
+
+		receive := make([]byte, EchoReplyHeadLen+length)
+		if _, err := conn.Read(receive); err != nil {
+			return false
+		}
+		return true
 	} else {
 		log2.Info("[IcmpCheck]:", host)
+		size := 32
+		var seq int16 = 1
+		const EchoRequestHeadLen = 8
+		const EchoReplyHeadLen = 20
+
+		startTime := time.Now()
+		conn, err := net.DialTimeout("ip4:icmp", host, 3*time.Second)
+		if err != nil {
+			log2.Warn("[IcmpCheck]", err)
+			return false
+		}
+		defer conn.Close()
+		id0, id1 := genIdentifier(host)
+
+		msg := make([]byte, size+EchoRequestHeadLen)
+		msg[0] = 8
+		msg[1] = 0
+		msg[2] = 0
+		msg[3] = 0
+		msg[4], msg[5] = id0, id1
+		msg[6], msg[7] = genSequence(seq)
+
+		length := size + EchoRequestHeadLen
+
+		check := checkSum(msg[0:length])
+		msg[2] = byte(check >> 8)
+		msg[3] = byte(check & 255)
+
+		if err := conn.SetDeadline(startTime.Add(5 * time.Second)); err != nil {
+			return false
+		}
+
+		if _, err := conn.Write(msg[0:length]); err != nil {
+			return false
+		}
+
+		receive := make([]byte, EchoReplyHeadLen+length)
+		if _, err := conn.Read(receive); err != nil {
+			return false
+		}
+		return true
 	}
-	size := 32
-	var seq int16 = 1
-	const EchoRequestHeadLen = 8
-	const EchoReplyHeadLen = 20
-
-	startTime := time.Now()
-	conn, err := net.DialTimeout("ip4:icmp", host, 3*time.Second)
-	if err != nil {
-		log2.Warn("[IcmpCheck]", err)
-		return false
-	}
-	defer conn.Close()
-	id0, id1 := genIdentifier(host)
-
-	msg := make([]byte, size+EchoRequestHeadLen)
-	msg[0] = 8
-	msg[1] = 0
-	msg[2] = 0
-	msg[3] = 0
-	msg[4], msg[5] = id0, id1
-	msg[6], msg[7] = genSequence(seq)
-
-	length := size + EchoRequestHeadLen
-
-	check := checkSum(msg[0:length])
-	msg[2] = byte(check >> 8)
-	msg[3] = byte(check & 255)
-
-	if err := conn.SetDeadline(startTime.Add(5 * time.Second)); err != nil {
-		return false
-	}
-
-	if _, err := conn.Write(msg[0:length]); err != nil {
-		return false
-	}
-
-	receive := make([]byte, EchoReplyHeadLen+length)
-	if _, err := conn.Read(receive); err != nil {
-		return false
-	}
-	return true
 }
 
 func checkSum(msg []byte) uint16 {

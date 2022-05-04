@@ -16,10 +16,18 @@ import (
 func HttpCheck(domain string, port string, ip string) bool {
 	var url string
 	log2.Info("[HttpCheck]:", ip)
-	if port == "80" {
-		url = "http://" + domain
+	if domain != "" {
+		if port == "80" {
+			url = "http://" + domain
+		} else {
+			url = "http://" + domain + ":" + port
+		}
 	} else {
-		url = "http://" + domain + ":" + port
+		if port == "80" {
+			url = "http://" + ip
+		} else {
+			url = "http://" + ip + ":" + port
+		}
 	}
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)

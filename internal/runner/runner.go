@@ -262,34 +262,97 @@ func HandleTargets(queue *job.Queue, fofaPrints *fringerprint.FofaPrints) []*Run
 	}
 	if len(targets) > 0 {
 		for _, v := range targets {
-			target := strings.Split(v, ":")
-			if len(target) > 0 {
-				tmptarget := util.TargetsHandle(target[0]) //目标处理，若是c段地址，则返回一个ip段，若是单个ip，则直接返回单个ip切片，若是域名或url地址，则返回域名
-				for _, t := range tmptarget {
-					var runner2 *Runner
-					var err1 error
-					if strings.Contains(t, "com") || strings.Contains(t, "cn") {
-						ip := getipbydomain.GetIPbyDomain(t)
-						if strings.Contains(target[1], "U:") {
-							tmp := strings.Split(target[1], ":")
-							port := tmp[1]
-							runner2, err1 = NewRunner(ip, port, t, "udp", fofaPrints)
+			if !strings.Contains(v, "http") {
+				target := strings.Split(v, ":")
+				if len(target) > 0 {
+					tmptarget := util.TargetsHandle(target[0]) //目标处理，若是c段地址，则返回一个ip段，若是单个ip，则直接返回单个ip切片，若是域名或url地址，则返回域名
+					for _, t := range tmptarget {
+						var runner2 *Runner
+						var err1 error
+						if strings.Contains(t, "com") || strings.Contains(t, "cn") {
+							ip := getipbydomain.GetIPbyDomain(t)
+							if strings.Contains(target[1], "U:") {
+								tmp := strings.Split(target[1], ":")
+								port := tmp[1]
+								runner2, err1 = NewRunner(ip, port, t, "udp", fofaPrints)
+							}
+							runner2, err1 = NewRunner(ip, target[1], t, "tcp", fofaPrints)
+						} else {
+							if strings.Contains(target[1], "U") {
+								tmp := strings.Split(target[1], ":")
+								port := tmp[1]
+								runner2, err1 = NewRunner(t, port, "", "udp", fofaPrints)
+							}
+							runner2, err1 = NewRunner(t, target[1], "", "tcp", fofaPrints)
 						}
-						runner2, err1 = NewRunner(ip, target[1], t, "tcp", fofaPrints)
-					} else {
-						if strings.Contains(target[1], "U") {
-							tmp := strings.Split(target[1], ":")
-							port := tmp[1]
-							runner2, err1 = NewRunner(t, port, "", "udp", fofaPrints)
+						if err1 != nil {
+							log2.Error("[HandleTargets]:", err1)
 						}
-						runner2, err1 = NewRunner(t, target[1], "", "tcp", fofaPrints)
+						runners = append(runners, runner2)
 					}
-					if err1 != nil {
-						log2.Error("[HandleTargets]:", err1)
+				}
+			} else if strings.Contains(v, "https") {
+				vtarget := v[8:]
+				target := strings.Split(vtarget, ":")
+				if len(v) > 0 {
+					tmptarget := util.TargetsHandle(v) //目标处理，若是c段地址，则返回一个ip段，若是单个ip，则直接返回单个ip切片，若是域名或url地址，则返回域名
+					for _, t := range tmptarget {
+						var runner2 *Runner
+						var err1 error
+						if strings.Contains(t, "com") || strings.Contains(t, "cn") {
+							ip := getipbydomain.GetIPbyDomain(t)
+							if strings.Contains(target[1], "U:") {
+								tmp := strings.Split(target[1], ":")
+								port := tmp[1]
+								runner2, err1 = NewRunner(ip, port, t, "udp", fofaPrints)
+							}
+							runner2, err1 = NewRunner(ip, target[1], t, "tcp", fofaPrints)
+						} else {
+							if strings.Contains(target[1], "U") {
+								tmp := strings.Split(target[1], ":")
+								port := tmp[1]
+								runner2, err1 = NewRunner(t, port, "", "udp", fofaPrints)
+							}
+							runner2, err1 = NewRunner(t, target[1], "", "tcp", fofaPrints)
+						}
+						if err1 != nil {
+							log2.Error("[HandleTargets]:", err1)
+						}
+						runners = append(runners, runner2)
 					}
-					runners = append(runners, runner2)
+				}
+			} else if strings.Contains(v, "http") {
+				vtarget := v[7:]
+				target := strings.Split(vtarget, ":")
+				if len(v) > 0 {
+					tmptarget := util.TargetsHandle(v) //目标处理，若是c段地址，则返回一个ip段，若是单个ip，则直接返回单个ip切片，若是域名或url地址，则返回域名
+					for _, t := range tmptarget {
+						var runner2 *Runner
+						var err1 error
+						if strings.Contains(t, "com") || strings.Contains(t, "cn") {
+							ip := getipbydomain.GetIPbyDomain(t)
+							if strings.Contains(target[1], "U:") {
+								tmp := strings.Split(target[1], ":")
+								port := tmp[1]
+								runner2, err1 = NewRunner(ip, port, t, "udp", fofaPrints)
+							}
+							runner2, err1 = NewRunner(ip, target[1], t, "tcp", fofaPrints)
+						} else {
+							if strings.Contains(target[1], "U") {
+								tmp := strings.Split(target[1], ":")
+								port := tmp[1]
+								runner2, err1 = NewRunner(t, port, "", "udp", fofaPrints)
+							}
+							runner2, err1 = NewRunner(t, target[1], "", "tcp", fofaPrints)
+						}
+						if err1 != nil {
+							log2.Error("[HandleTargets]:", err1)
+						}
+						runners = append(runners, runner2)
+					}
 				}
 			}
+
 		}
 	}
 	if len(runners) > 0 {
@@ -302,11 +365,10 @@ func HandleTargets(queue *job.Queue, fofaPrints *fringerprint.FofaPrints) []*Run
 func Scan(target *Runner, GoNmap *gonmap.VScan, region *ipinfo.Ip2Region) *result.Output {
 	// 域名存在与否
 	if target.Domain != "" {
-
 		// 主机存活探测
 		if icmp.IcmpCheckAlive(target.Domain, target.Ip) || ping.PingCheckAlive(target.Domain) || httpcheck.HttpCheck(target.Domain, target.Port, target.Ip) || tcp.TcpCheckAlive(target.Ip, target.Port) {
 
-			if tcp.TcpCheckAlive(target.Ip, target.Port) {
+			if tcp.TcpCheckAlive(target.Ip, target.Port) || httpcheck.HttpCheck(target.Domain, target.Port, target.Ip) {
 				// 普通端口探测
 				nmapbanner, err := gonmap.GoNmapScan(GoNmap, target.Ip, target.Port, target.Protocol)
 				if nmapbanner != nil {
@@ -360,56 +422,54 @@ func Scan(target *Runner, GoNmap *gonmap.VScan, region *ipinfo.Ip2Region) *resul
 		if cdncheck.IPCDNCheck(target.Ip) != true { //判断IP是否存在CDN
 
 			// 主机存活探测
-			if icmp.IcmpCheckAlive("", target.Ip) || ping.PingCheckAlive(target.Domain) || httpcheck.HttpCheck(target.Ip, target.Port, target.Ip) || tcp.TcpCheckAlive(target.Ip, target.Port) {
+			if icmp.IcmpCheckAlive("", target.Ip) || ping.PingCheckAlive(target.Ip) || httpcheck.HttpCheck(target.Domain, target.Port, target.Ip) || tcp.TcpCheckAlive(target.Ip, target.Port) {
 
-				if tcp.TcpCheckAlive(target.Ip, target.Port) {
-					// 普通端口探测
-					nmapbanner, err := gonmap.GoNmapScan(GoNmap, target.Ip, target.Port, target.Protocol)
-					if nmapbanner != nil {
-						target.Output.Servers = nmapbanner
-					}
-					if strings.Contains(target.Output.Servers.Banner, "HTTP") {
-						target.Output.Servers.Name = "http"
-						target.Output.Servername = "http"
-					} else {
-						target.Output.Servername = nmapbanner.Name
-					}
-					// web端口探测
-					webresult := result.FingerResult{}
-					if target.Output.Servername == "http" {
-						webresult = target.Request()
-					}
-					target.Output.Webbanner = webresult
-					target.Output.Ip = target.Ip
-					target.Output.Port = target.Port
-					target.Output.Protocol = strings.ToUpper(target.Protocol)
-					target.Output.Domain = target.Domain
-
-					if webresult.Header != "" {
-						target.Output.Banner = target.Output.Webbanner.Header
-					} else {
-						target.Output.Banner = nmapbanner.Banner
-					}
-					// ip信息查询
-					info, err := ipinfo.GetIpinfo(region, target.Ip)
-					if err != nil {
-						log2.Warn("[GetIPInfo]:", err)
-					}
-					target.Output.City = info.City
-					target.Output.Region = info.Region
-					target.Output.ISP = info.ISP
-					target.Output.CityId = info.CityId
-					target.Output.Province = info.Province
-					target.Output.Country = info.Country
-					target.Output.TargetId = target.Ip + "-" + target.Port + "-" + target.Domain
-					if target.Output.Port == "80" {
-						target.Output.Target = "http://www." + target.Domain
-					} else {
-						target.Output.TargetId = "http://www." + target.Domain + ":" + target.Port
-					}
-					target.Output.LastTime = time.Now().Format("2006-01-02 15:04:05")
-					return target.Output
+				// 普通端口探测
+				nmapbanner, err := gonmap.GoNmapScan(GoNmap, target.Ip, target.Port, target.Protocol)
+				if nmapbanner != nil {
+					target.Output.Servers = nmapbanner
 				}
+				if strings.Contains(target.Output.Servers.Banner, "HTTP") {
+					target.Output.Servers.Name = "http"
+					target.Output.Servername = "http"
+				} else {
+					target.Output.Servername = nmapbanner.Name
+				}
+				// web端口探测
+				webresult := result.FingerResult{}
+				if target.Output.Servername == "http" {
+					webresult = target.Request()
+				}
+				target.Output.Webbanner = webresult
+				target.Output.Ip = target.Ip
+				target.Output.Port = target.Port
+				target.Output.Protocol = strings.ToUpper(target.Protocol)
+				target.Output.Domain = ""
+
+				if webresult.Header != "" {
+					target.Output.Banner = target.Output.Webbanner.Header
+				} else {
+					target.Output.Banner = nmapbanner.Banner
+				}
+				// ip信息查询
+				info, err := ipinfo.GetIpinfo(region, target.Ip)
+				if err != nil {
+					log2.Warn("[GetIPInfo]:", err)
+				}
+				target.Output.City = info.City
+				target.Output.Region = info.Region
+				target.Output.ISP = info.ISP
+				target.Output.CityId = info.CityId
+				target.Output.Province = info.Province
+				target.Output.Country = info.Country
+				target.Output.TargetId = target.Ip + "-" + target.Port + "-" + target.Domain
+				if target.Output.Port == "80" {
+					target.Output.Target = "http://www." + target.Ip
+				} else {
+					target.Output.Target = "http://www." + target.Ip + ":" + target.Port
+				}
+				target.Output.LastTime = time.Now().Format("2006-01-02 15:04:05")
+				return target.Output
 			}
 		}
 	}
